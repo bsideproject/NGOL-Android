@@ -1,4 +1,4 @@
-# NGOL
+# NGOL Android Project, B-Side 14th Generation Team 11
 
 ## Project Setting
 
