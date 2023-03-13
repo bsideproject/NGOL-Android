@@ -20,4 +20,5 @@ include(
     ":core:remote",
     ":common:di",
     ":common:design-system",
+    ":common:ui"
 )
