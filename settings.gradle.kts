@@ -4,7 +4,6 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven("https://devrepo.kakao.com/nexus/content/groups/public/")
     }
 }
 dependencyResolutionManagement {
@@ -12,7 +11,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://devrepo.kakao.com/nexus/content/groups/public/")
     }
 }
 rootProject.name = "nuguollim"
@@ -22,5 +20,6 @@ include(
     ":core:remote",
     ":common:di",
     ":common:design-system",
+    ":common:ui"
     ":feature:social-login",
 )
