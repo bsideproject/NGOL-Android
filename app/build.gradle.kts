@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation(projects.common.designSystem)
+    implementation(projects.common.ui)
     implementation(projects.feature.socialLogin)
 
     implementation(libs.androidx.core.ktx)

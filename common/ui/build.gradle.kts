@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.system.ui.controller)
 
     implementation(project(mapOf("path" to ":common:design-system")))
+    implementation(project(mapOf("path" to ":feature:social-login")))
 }
