@@ -1,4 +1,4 @@
-package com.nugu.nuguollim.design_system.component
+package com.nugu.social_login.login.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border

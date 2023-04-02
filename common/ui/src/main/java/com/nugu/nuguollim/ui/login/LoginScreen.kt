@@ -10,12 +10,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.nugu.nuguollim.design_system.component.GoogleLoginButton
-import com.nugu.nuguollim.design_system.component.KakaoLoginButton
-import com.nugu.nuguollim.design_system.component.LoginHelpButton
-import com.nugu.nuguollim.design_system.component.NaverLoginButton
 import com.nugu.nuguollim.ui.DevicePreviews
 import com.nugu.nuguollim.ui.R
+import com.nugu.social_login.login.ui.GoogleLoginButton
+import com.nugu.social_login.login.ui.KakaoLoginButton
+import com.nugu.social_login.login.ui.LoginHelpButton
+import com.nugu.social_login.login.ui.NaverLoginButton
 
 @Composable
 fun LoginScreen(
