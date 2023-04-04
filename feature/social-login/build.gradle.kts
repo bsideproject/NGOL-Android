@@ -23,4 +23,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material.compose)
     implementation(libs.coil)
+
+    implementation(project(mapOf("path" to ":common:design-system")))
 }
