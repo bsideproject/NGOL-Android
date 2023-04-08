@@ -1,4 +1,4 @@
-package com.nugu.nuguollim.design_system.theme
+package com.nugu.nuguollim.design_system.component
 
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
@@ -9,6 +9,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.nugu.nuguollim.design_system.theme.Black
+import com.nugu.nuguollim.design_system.theme.pretendard
 
 @Composable
 fun NuguTextField(

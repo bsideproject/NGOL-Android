@@ -15,7 +15,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nugu.nuguollim.design_system.R
-import com.nugu.nuguollim.design_system.theme.*
+import com.nugu.nuguollim.design_system.component.NuguTextField
+import com.nugu.nuguollim.design_system.component.PlaceHolderStyle
+import com.nugu.nuguollim.design_system.theme.Gray300
+import com.nugu.nuguollim.design_system.theme.Gray400
+import com.nugu.nuguollim.design_system.theme.NuguollimTheme
+import com.nugu.nuguollim.design_system.theme.Primary500
 
 @Composable
 fun SearchTextField(
