@@ -1,4 +1,4 @@
-package com.nugu.nuguollim.design_system.theme
+package com.nugu.nuguollim.design_system.component
 
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import com.nugu.nuguollim.design_system.theme.pretendard
 
 @Composable
 fun PretendardText(
