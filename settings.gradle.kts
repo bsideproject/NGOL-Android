@@ -24,4 +24,5 @@ include(
     ":common:design-system",
     ":common:ui",
     ":feature:social-login",
+    ":feature:search",
 )
