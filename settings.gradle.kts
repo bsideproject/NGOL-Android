@@ -20,9 +20,11 @@ include(
     ":app",
     ":core:data",
     ":core:remote",
+    ":core:repository",
     ":common:di",
     ":common:design-system",
     ":common:ui",
     ":feature:social-login",
     ":feature:search",
+    ":feature:terms",
 )
