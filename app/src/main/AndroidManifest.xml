@@ -16,7 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Nuguollim"
         tools:targetApi="31">
-
+        <activity
+            android:name="com.nugu.nuguollim.LoginInActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login_in"
+            android:theme="@style/Theme.Nuguollim" />
+        <activity
+            android:name="com.nugu.nuguollim.SignUpActivity"
+            android:exported="false"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@style/Theme.Nuguollim" />
         <activity
             android:name="com.nugu.nuguollim.MainActivity"
             android:exported="true"
@@ -28,7 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

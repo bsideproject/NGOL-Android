@@ -1,18 +1,22 @@
 package com.nugu.nuguollim
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Scaffold
+import androidx.compose.ui.Modifier
+import com.nugu.nuguollim.navigation.SignUpNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val intent = Intent(this, LoginInActivity::class.java)
-            startActivity(intent)
+            Scaffold(modifier = Modifier.fillMaxSize()) {
+                SignUpNavHost {}
+            }
         }
     }
 }
