@@ -17,7 +17,11 @@ dependencies {
     implementation(libs.androidx.material.compose)
     implementation(libs.coil)
     implementation(libs.system.ui.controller)
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.androidx.compose.hilt.navigation)
 
     implementation(project(mapOf("path" to ":common:design-system")))
     implementation(project(mapOf("path" to ":feature:social-login")))
+    implementation(project(mapOf("path" to ":core:repository")))
+    implementation(project(mapOf("path" to ":core:data")))
 }

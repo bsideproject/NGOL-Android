@@ -1,18 +1,20 @@
 package com.nugu.nuguollim
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.nugu.nuguollim.ui.login.LoginRoute
+import com.nugu.nuguollim.ui.theme.NuguollimTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class LoginInActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val intent = Intent(this, LoginInActivity::class.java)
-            startActivity(intent)
+            NuguollimTheme {
+                LoginRoute(this)
+            }
         }
     }
 }
