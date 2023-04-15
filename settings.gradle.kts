@@ -24,6 +24,7 @@ include(
     ":common:di",
     ":common:design-system",
     ":common:ui",
+    ":common:exception",
     ":feature:social-login",
     ":feature:search",
     ":feature:terms",

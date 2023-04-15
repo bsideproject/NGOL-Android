@@ -3,6 +3,8 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.common.exception)
+
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.retrofit.logging)

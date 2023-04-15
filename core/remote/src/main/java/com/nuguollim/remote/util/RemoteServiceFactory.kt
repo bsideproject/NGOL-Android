@@ -12,14 +12,16 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 class RemoteServiceFactory(
-    private vararg val interceptors: Interceptor
+    private vararg val interceptors: Interceptor?
 ) {
 
     @Singleton
     private val okHttpClient: OkHttpClient
         get() = OkHttpClient.Builder().run {
             interceptors.all { interceptor ->
-                addInterceptor(interceptor)
+                if (interceptor != null) {
+                    addInterceptor(interceptor)
+                }
                 true
             }
             connectTimeout(10, TimeUnit.SECONDS)
