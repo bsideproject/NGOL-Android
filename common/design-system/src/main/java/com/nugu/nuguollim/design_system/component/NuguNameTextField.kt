@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 @Composable
-fun NameTextField(
+fun NuguNameTextField(
     modifier: Modifier = Modifier,
     name: String = "",
     onValueChange: (String) -> Unit = {}
@@ -42,7 +42,7 @@ fun NameTextField(
     val coroutineScope = rememberCoroutineScope()
     val offsetX = remember { Animatable(0f) }
     val view = LocalView.current
-    val painter = painterResource(id = R.drawable.ic_icon_delete_text)
+    val painter = painterResource(id = R.drawable.ic_delete_text)
     val pattern = Pattern.compile("^$|[a-zA-Z0-9가-힣]+$")
     val maxByte = 18
     val maxLength = maxByte / 3
@@ -157,7 +157,7 @@ private fun NameTextFieldPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NameTextField(
+        NuguNameTextField(
             name = name,
             onValueChange = { name = it }
         )
