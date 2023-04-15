@@ -20,6 +20,7 @@ moshi = "1.14.0"
 moshiConverter = "2.9.0"
 coil = "2.2.2"
 secretGradlePlugin = "2.0.1"
+json = "20230227"
 
 javax = "1"
 
@@ -66,6 +67,7 @@ system-ui-controller = { module = "com.google.accompanist:accompanist-systemuico
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 javax = { module = "javax.inject:javax.inject", version.ref = "javax" }
+json = { module = "org.json:json", version.ref = "json" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
