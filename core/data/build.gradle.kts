@@ -7,4 +7,7 @@ dependencies {
 
     implementation(libs.coroutine.core)
     implementation(libs.javax)
+
+    implementation(libs.okhttp)
+    implementation(libs.json)
 }

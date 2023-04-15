@@ -24,4 +24,5 @@ dependencies {
     implementation(project(mapOf("path" to ":feature:social-login")))
     implementation(project(mapOf("path" to ":core:repository")))
     implementation(project(mapOf("path" to ":core:data")))
+    implementation(projects.common.di)
 }

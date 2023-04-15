@@ -43,6 +43,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     }
 
     metricParameters += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
+    metricParameters += "-opt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi"
 
     return metricParameters.toList()
 }
