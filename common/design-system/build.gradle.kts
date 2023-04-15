@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.androidx.material.compose)
     implementation(libs.coil)
     implementation(libs.system.ui.controller)
+    implementation(libs.androidx.compose.navigation)
 }
