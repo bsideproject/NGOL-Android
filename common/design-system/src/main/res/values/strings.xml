@@ -5,4 +5,11 @@
     <string name="title_home">홈</string>
     <string name="title_template_search">템플릿 찾기</string>
     <string name="title_community">커뮤니티</string>
+
+    <string name="home_template_item_label_example">문의/답변</string>
+    <string name="home_template_item_content_example">교수님 안녕하세요?\n
+        저는 2023년도 1학기 &lt;누구올림의 이해&gt; 수업을 수강 중인 경제학과 정느리라고 합니다.\n
+        다름이 아니라, 교수님 안녕하세요? 저는 2023년도 1학기 &lt;누구올림의 이해&gt; 수업을 수강 중인 경제학과 정느리라고 합니다.\n
+        다름이 아니라,
+    </string>
 </resources>

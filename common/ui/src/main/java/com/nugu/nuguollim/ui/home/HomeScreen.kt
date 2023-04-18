@@ -3,10 +3,11 @@ package com.nugu.nuguollim.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,9 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.nugu.nuguollim.common.data.model.template.HomeTemplate
 import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
 import com.nugu.nuguollim.design_system.component.NuguDropDownMenu
 import com.nugu.nuguollim.design_system.component.NuguSearchTextField
+import com.nugu.nuguollim.design_system.component.NuguTemplateItem
 import com.nugu.nuguollim.design_system.theme.Black
 import com.nugu.nuguollim.design_system.theme.Primary500
 import com.nugu.nuguollim.design_system.theme.pretendard
@@ -43,13 +46,41 @@ fun HomeRoute(
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    homeTemplates: List<HomeTemplate> = listOf(),
+    onTemplateClick: (HomeTemplate) -> Unit = {},
+    onSearchText: (String) -> Unit = {}
 ) {
+    var searchText by remember { mutableStateOf("") }
+    var sortedKey by remember { mutableStateOf("인기순") }
+    val sortedTemplates by remember {
+        mutableStateOf(
+            homeTemplates.toList().sortedBy { it.viewCount }
+        )
+    }
+
     Column(
         modifier = modifier
     ) {
-        HomeSearchBar()
-        HomeSearchListMenu()
+        HomeSearchBar(
+            text = searchText,
+            onValueChange = { searchText = it },
+            onSearchText = onSearchText
+        )
+        HomeSearchListMenu(
+            items = sortedTemplates,
+            onItemClicked = onTemplateClick,
+            onSortChanged = {
+                if (it != sortedKey) {
+                    if (it == "인기순") {
+                        sortedTemplates.sortedBy { template -> template.viewCount }
+                    } else if (it == "최신순") {
+                        sortedTemplates.sortedBy { template -> template.date }
+                    }
+                    sortedKey = it
+                }
+            }
+        )
     }
 }
 
@@ -57,7 +88,8 @@ fun HomeScreen(
 fun HomeSearchBar(
     modifier: Modifier = Modifier,
     text: String = "",
-    onValueChange: (String) -> Unit = {}
+    onValueChange: (String) -> Unit = {},
+    onSearchText: (String) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -100,7 +132,8 @@ fun HomeSearchBar(
         NuguSearchTextField(
             modifier = Modifier.fillMaxWidth(),
             text = text,
-            onValueChange = onValueChange
+            onValueChange = onValueChange,
+            onSearchText = onSearchText
         )
     }
 }
@@ -108,7 +141,9 @@ fun HomeSearchBar(
 @Composable
 fun HomeSearchListMenu(
     modifier: Modifier = Modifier,
-    onSortChanged: (String) -> Unit = {}
+    items: List<HomeTemplate> = listOf(),
+    onSortChanged: (String) -> Unit = {},
+    onItemClicked: (HomeTemplate) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -132,11 +167,17 @@ fun HomeSearchListMenu(
                 onSelectItem = { onSortChanged(it) }
             )
         }
-
+        Spacer(modifier = Modifier.height(12.dp))
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
+            items(items) { item ->
+                NuguTemplateItem(
+                    label = item.theme,
+                    content = item.content,
+                    onClick = { onItemClicked(item) }
+                )
+            }
         }
     }
 }
@@ -144,38 +185,41 @@ fun HomeSearchListMenu(
 @Preview(showBackground = true, widthDp = 360, heightDp = 480)
 @Composable
 private fun HomeScreenPreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HomeScreen()
+    val items = remember {
+        mutableStateListOf<HomeTemplate>().apply {
+            repeat(50) {
+                add(
+                    HomeTemplate(
+                        0,
+                        "교수님 안녕하세요?\n" +
+                                "저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
+                                "다름이 아니라, 교수님 안녕하세요? 저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
+                                "다름이 아니라, ",
+                        "문의/답변"
+                    )
+                )
+                add(
+                    HomeTemplate(
+                        0,
+                        "교수님 안녕하세요?\n" +
+                                "저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
+                                "다름이 아니라, 교수님 안녕하세요? 저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
+                                "다름이 아니라, ",
+                        "상담 문의"
+                    )
+                )
+            }
+        }
     }
-}
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 480)
-@Composable
-private fun HomeSearchBarPreview() {
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HomeSearchBar()
-    }
-}
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 480)
-@Composable
-private fun HomeSearchListMenuPreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        HomeSearchListMenu()
+        HomeScreen(
+            homeTemplates = items
+        )
     }
 }

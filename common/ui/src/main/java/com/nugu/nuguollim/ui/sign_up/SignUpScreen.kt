@@ -16,12 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.nugu.nuguollim.common.data.model.terms.Terms
 import com.nugu.nuguollim.design_system.component.NuguFillButton
 import com.nugu.nuguollim.design_system.component.NuguNameTextField
 import com.nugu.nuguollim.design_system.component.TermsCheckBox
 import com.nugu.nuguollim.design_system.theme.pretendard
 import com.nugu.nuguollim.ui.DevicePreviews
-import com.nuguollim.data.model.Terms
 
 @Composable
 fun SignUpRoute(
