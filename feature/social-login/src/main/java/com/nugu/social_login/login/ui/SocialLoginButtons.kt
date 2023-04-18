@@ -91,7 +91,7 @@ fun GoogleLoginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val painter = painterResource(id = R.drawable.ic_icon_google)
+    val painter = painterResource(id = R.drawable.ic_google)
 
     Button(
         modifier = modifier

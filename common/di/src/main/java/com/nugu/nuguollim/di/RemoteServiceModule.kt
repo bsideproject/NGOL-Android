@@ -1,6 +1,7 @@
 package com.nugu.nuguollim.di
 
 import com.nuguollim.remote.service.auth.AuthService
+import com.nuguollim.remote.service.terms.TermsService
 import com.nuguollim.remote.util.RemoteServiceFactory
 import dagger.Module
 import dagger.Provides
@@ -22,4 +23,9 @@ class RemoteServiceModule {
         @Named("baseUrl") baseUrl: String
     ): AuthService = remoteServiceFactory.createService(AuthService::class.java, baseUrl)
 
+    @Provides
+    fun providesTermsService(
+        remoteServiceFactory: RemoteServiceFactory,
+        @Named("baseUrl") baseUrl: String
+    ): TermsService = remoteServiceFactory.createService(TermsService::class.java, baseUrl)
 }
