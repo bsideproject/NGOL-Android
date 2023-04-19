@@ -27,4 +27,5 @@ include(
     ":common:data",
     ":feature:social-login",
     ":feature:search",
+    ":core:data-store",
 )
