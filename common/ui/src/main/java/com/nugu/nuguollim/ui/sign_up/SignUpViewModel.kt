@@ -2,7 +2,7 @@ package com.nugu.nuguollim.ui.sign_up
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nugu.repository.TermsRepository
+import com.nuguollim.data.repository.terms.TermsRepositoryImpl
 import com.nuguollim.data.model.auth.SignUpData
 import com.nuguollim.data.usecase.auth.AuthProvide
 import com.nuguollim.data.usecase.auth.SignUpUseCase
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val termsRepository: TermsRepository,
+    private val termsRepository: TermsRepositoryImpl,
     private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
     val termsList = termsRepository.getTermsList().stateIn(

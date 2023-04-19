@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(projects.core.remote)
+    implementation(projects.common.data)
 
     implementation(libs.coroutine.core)
     implementation(libs.javax)

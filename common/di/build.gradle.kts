@@ -6,7 +6,6 @@ plugins {
 dependencies {
     implementation(projects.core.remote)
     implementation(projects.core.data)
-    implementation(projects.core.repository)
 
     implementation(libs.okhttp)
     implementation(libs.retrofit.logging)
