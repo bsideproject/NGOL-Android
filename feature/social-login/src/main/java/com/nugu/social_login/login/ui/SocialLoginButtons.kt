@@ -1,5 +1,9 @@
 package com.nugu.social_login.login.ui
 
+import android.app.Activity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,20 +18,40 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.navercorp.nid.NaverIdLoginSDK
 import com.nugu.nuguollim.design_system.R
 import com.nugu.nuguollim.design_system.theme.*
+import com.nugu.social_login.login.GoogleLogin
+import com.nugu.social_login.login.KakaoLogin
+import com.nugu.social_login.login.NaverLogin
 
 @Composable
 fun KakaoLoginButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    activity: ComponentActivity = LocalContext.current as ComponentActivity,
+    kakaoLogin: KakaoLogin? = null,
+    onLoginSuccess: (String?) -> Unit = {},
+    onLoginFail: (Throwable?) -> Unit = {},
 ) {
     val painter = painterResource(id = R.drawable.ic_login_button_kakao)
+    val kakaoLoginResult = { token: String?, error: Throwable? ->
+        if (error != null) {
+            onLoginFail(error)
+        }
+        if (token != null) {
+            onLoginSuccess(token)
+        }
+    }
 
     Button(
         modifier = modifier
@@ -38,7 +62,7 @@ fun KakaoLoginButton(
             contentColor = KakaoTextBlack
         ),
         contentPadding = PaddingValues(0.dp),
-        onClick = { onClick() },
+        onClick = { kakaoLogin?.login(activity, kakaoLoginResult) },
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp,
             pressedElevation = 0.dp,
@@ -57,9 +81,28 @@ fun KakaoLoginButton(
 @Composable
 fun NaverLoginButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    activity: ComponentActivity = LocalContext.current as ComponentActivity,
+    naverLogin: NaverLogin? = null,
+    onLoginSuccess: (String?) -> Unit = {},
+    onLoginFail: (String, String?) -> Unit = { code, message -> },
 ) {
     val painter = painterResource(id = R.drawable.ic_login_button_naver)
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            when (result.resultCode) {
+                Activity.RESULT_OK -> {
+                    val token = NaverIdLoginSDK.getAccessToken()
+                    onLoginSuccess(token)
+                }
+                Activity.RESULT_CANCELED -> {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    onLoginFail(errorCode, errorDescription)
+                }
+            }
+        }
+    )
 
     Button(
         modifier = modifier
@@ -70,7 +113,7 @@ fun NaverLoginButton(
             contentColor = Color.White
         ),
         contentPadding = PaddingValues(0.dp),
-        onClick = { onClick() },
+        onClick = { naverLogin?.login(activity, launcher) },
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp,
             pressedElevation = 0.dp,
@@ -89,9 +132,28 @@ fun NaverLoginButton(
 @Composable
 fun GoogleLoginButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    activity: ComponentActivity = LocalContext.current as ComponentActivity,
+    googleLogin: GoogleLogin? = null,
+    onLoginSuccess: (String?) -> Unit = {},
+    onLoginFail: (Int, String?) -> Unit = { code, message -> },
 ) {
     val painter = painterResource(id = R.drawable.ic_google)
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            val intent = result.data
+            val completedTask: Task<GoogleSignInAccount> =
+                GoogleSignIn.getSignedInAccountFromIntent(intent)
+
+            try {
+                completedTask.getResult(ApiException::class.java)?.also { account ->
+                    onLoginSuccess(account.idToken)
+                }
+            } catch (e: ApiException) {
+                onLoginFail(e.statusCode, e.message)
+            }
+        }
+    )
 
     Button(
         modifier = modifier
@@ -104,7 +166,7 @@ fun GoogleLoginButton(
             contentColor = Color.White
         ),
         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 13.5.dp),
-        onClick = { onClick() },
+        onClick = { googleLogin?.login(activity, launcher) },
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp,
             pressedElevation = 0.dp,
@@ -135,7 +197,7 @@ fun GoogleLoginButton(
 @Composable
 fun LoginHelpButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) {
     Button(
         modifier = modifier
@@ -183,9 +245,7 @@ private fun KakaoLoginPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        KakaoLoginButton {
-
-        }
+        KakaoLoginButton(activity = PreviewComponentActivity)
     }
 }
 
@@ -197,9 +257,7 @@ private fun NaverLoginPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NaverLoginButton {
-
-        }
+        NaverLoginButton(activity = PreviewComponentActivity)
     }
 }
 
@@ -211,9 +269,7 @@ private fun GoogleLoginPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        GoogleLoginButton {
-
-        }
+        GoogleLoginButton(activity = PreviewComponentActivity)
     }
 }
 
@@ -225,8 +281,8 @@ private fun LoginHelpPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LoginHelpButton {
-
-        }
+        LoginHelpButton()
     }
 }
+
+private object PreviewComponentActivity : ComponentActivity()

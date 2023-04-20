@@ -2,6 +2,7 @@ plugins {
     id("nuguollim.android.application")
     id("nuguollim.android.application.compose")
     id("nuguollim.android.hilt")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -29,6 +30,19 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0"
+    }
 }
 
 dependencies {
@@ -49,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material.compose)
     implementation(libs.coil)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

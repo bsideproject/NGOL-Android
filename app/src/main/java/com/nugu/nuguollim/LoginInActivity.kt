@@ -1,5 +1,6 @@
 package com.nugu.nuguollim
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,7 +14,14 @@ class LoginInActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NuguollimTheme {
-                LoginRoute(this)
+                LoginRoute{
+                    val intent = Intent(this, SignUpActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    startActivity(intent)
+
+                    finish()
+                }
             }
         }
     }
