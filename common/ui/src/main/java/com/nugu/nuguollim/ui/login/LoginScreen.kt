@@ -1,5 +1,6 @@
 package com.nugu.nuguollim.ui.login
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.nugu.exception.ResponseException
 import com.nugu.nuguollim.ui.DevicePreviews
 import com.nugu.nuguollim.ui.R
 import com.nugu.social_login.login.GoogleLogin
@@ -32,17 +35,23 @@ fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
     onStartSignUp: () -> Unit = {}
 ) {
-    val loginState by viewModel.loginState.collectAsState()
+    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
 
     when (loginState) {
         is ResultState.Error -> {
+            val error = (loginState as ResultState.Error).error
 
+            if (error is ResponseException) {
+                if (error.errorCode == ResponseException.ERROR_CODE_USER_ERROR) {
+                    onStartSignUp()
+                }
+            }
         }
-        ResultState.Loading -> {
+        is ResultState.Loading -> {
 
         }
         is ResultState.Success -> {
-            onStartSignUp()
+
         }
     }
 
@@ -54,7 +63,7 @@ fun LoginRoute(
             kakaoLogin = viewModel.kakaoLogin,
             naverLogin = viewModel.naverLogin,
             googleLogin = viewModel.googleLogin,
-            onLoginSuccess = { type, id -> viewModel.login(type, id) },
+            onLoginSuccess = { type, id -> viewModel.saveLocalAuthInfoAndLogin(type, id) },
             onLoginFail = {}
         )
     }
