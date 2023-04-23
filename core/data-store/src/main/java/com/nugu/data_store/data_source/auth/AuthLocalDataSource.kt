@@ -5,8 +5,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthLocalDataSource {
 
-    suspend fun setAuthInfo(provideType: String, provideId: String)
-
     fun getAuthInfo(): Flow<LocalAuthInfo>
+
+    suspend fun setAuthInfo(provideType: String, provideId: String, )
+
+    fun getProvideToken(): Flow<String?>
+
+    suspend fun setProvideToken(token: String)
 
 }

@@ -1,20 +1,36 @@
 package com.nugu.nuguollim.ui.sign_up
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.nugu.nuguollim.common.data.model.terms.Terms
 import com.nugu.nuguollim.design_system.component.NuguFillButton
@@ -22,23 +38,48 @@ import com.nugu.nuguollim.design_system.component.NuguNameTextField
 import com.nugu.nuguollim.design_system.component.TermsCheckBox
 import com.nugu.nuguollim.design_system.theme.pretendard
 import com.nugu.nuguollim.ui.DevicePreviews
+import com.nuguollim.data.model.auth.TokenData
+import com.nuguollim.data.state.ResultState
+import com.nuguollim.data.usecase.auth.AuthProvide
 
 @Composable
 fun SignUpRoute(
     navController: NavHostController,
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: SignUpViewModel = hiltViewModel(),
 ) {
-    val termsList by viewModel.termsList.collectAsState()
+    val activity = LocalContext.current as ComponentActivity
+    val provideType = AuthProvide.Type(activity.intent.getStringExtra("provideType") ?: "")
+    val provideId = AuthProvide.Id(activity.intent.getStringExtra("provideId") ?: "")
 
-    SignUpScreen(termsList) {
-        navController.navigate("welcome")
+    val termsList by viewModel.termsList.collectAsStateWithLifecycle()
+    val signUpState by viewModel.signUpState.collectAsStateWithLifecycle()
+    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
+
+    if (loginState is ResultState.Success) {
+        LaunchedEffect(loginState) {
+            val data = (loginState as ResultState.Success<TokenData>).data
+            viewModel.setToken(AuthProvide.Token(data.token))
+            navController.navigate("welcome")
+        }
+    }
+
+    if (signUpState is ResultState.Success) {
+        LaunchedEffect(signUpState) {
+            viewModel.setAuthInfo(provideType, provideId)
+            viewModel.login(provideType, provideId)
+        }
+    }
+
+    SignUpScreen(termsList) { terms, provideName ->
+        val signupTermsList = terms.filter { it.value }.map { AuthProvide.Terms(it.key.id) }.toList()
+        viewModel.signUp(provideType, provideId, provideName, signupTermsList)
     }
 }
 
 @Composable
 fun SignUpScreen(
     termsList: List<Terms>,
-    onClickSignUp: (Map<Terms, Boolean>) -> Unit,
+    onClickSignUp: (Map<Terms, Boolean>, AuthProvide.Name) -> Unit,
 ) {
     var name by remember { mutableStateOf("") }
 
@@ -69,7 +110,7 @@ fun SignUpScreen(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 termsList = termsList,
                 onClickTerms = {},
-                onClickSignUp = onClickSignUp
+                onClickSignUp = { onClickSignUp(it, AuthProvide.Name(name)) }
             )
         }
     }
@@ -143,7 +184,7 @@ private fun SignUpScreenPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SignUpScreen(emptyList()) {}
+        SignUpScreen(emptyList()) { _, _ -> }
     }
 }
 

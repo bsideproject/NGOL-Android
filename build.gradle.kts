@@ -1,5 +1,4 @@
 buildscript {
-    val compose_ui_version by extra("1.2.0")
     repositories {
         gradlePluginPortal()
         google()
@@ -15,5 +14,4 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.secret.gradle.plugin) apply false
-    id("org.jetbrains.kotlin.android") version "1.7.0" apply false
 }

@@ -1,13 +1,18 @@
 package com.nugu.nuguollim.ui.login
 
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nugu.exception.ResponseException
 import com.nugu.nuguollim.ui.DevicePreviews
 import com.nugu.nuguollim.ui.R
 import com.nugu.social_login.login.GoogleLogin
@@ -27,31 +31,40 @@ import com.nugu.social_login.login.NaverLogin
 import com.nugu.social_login.login.ui.GoogleLoginButton
 import com.nugu.social_login.login.ui.KakaoLoginButton
 import com.nugu.social_login.login.ui.NaverLoginButton
+import com.nuguollim.data.model.auth.AuthInfo
+import com.nuguollim.data.model.auth.TokenData
 import com.nuguollim.data.state.ResultState
 import com.nuguollim.data.usecase.auth.AuthProvide
 
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
-    onStartSignUp: () -> Unit = {}
+    onStartSignUp: (String, String) -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
+    val localAuthInfo by viewModel.localAuthInfo.collectAsStateWithLifecycle()
     val loginState by viewModel.loginState.collectAsStateWithLifecycle()
 
+    if (localAuthInfo is ResultState.Success) {
+        LaunchedEffect(localAuthInfo) {
+            val data = (localAuthInfo as ResultState.Success<AuthInfo>).data
+            val type = AuthProvide.Type(data.provideType)
+            val id = AuthProvide.Id(data.provideId)
+
+            viewModel.login(type, id)
+        }
+    }
+
     when (loginState) {
-        is ResultState.Error -> {
-            val error = (loginState as ResultState.Error).error
-
-            if (error is ResponseException) {
-                if (error.errorCode == ResponseException.ERROR_CODE_USER_ERROR) {
-                    onStartSignUp()
-                }
-            }
+        is ResultState.Loading -> Unit
+        is ResultState.Error -> LaunchedEffect(loginState) {
+            onStartSignUp.invoke(viewModel.provideType.data, viewModel.provideId.data)
         }
-        is ResultState.Loading -> {
-
-        }
-        is ResultState.Success -> {
-
+        is ResultState.Success -> LaunchedEffect(loginState) {
+            val data = (loginState as ResultState.Success<TokenData>).data
+            viewModel.setToken(AuthProvide.Token(data.token))
+            viewModel.setAuthInfo()
+            onNavigateToHome.invoke()
         }
     }
 
@@ -59,11 +72,13 @@ fun LoginRoute(
         modifier = Modifier.fillMaxSize()
     ) {
         LoginScreen(
-            modifier = Modifier.fillMaxSize().padding(it),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
             kakaoLogin = viewModel.kakaoLogin,
             naverLogin = viewModel.naverLogin,
             googleLogin = viewModel.googleLogin,
-            onLoginSuccess = { type, id -> viewModel.saveLocalAuthInfoAndLogin(type, id) },
+            onLoginSuccess = { type, id -> viewModel.login(type, id) },
             onLoginFail = {}
         )
     }
@@ -144,7 +159,9 @@ fun PreviewLoginScreen() {
         modifier = Modifier.fillMaxSize()
     ) {
         LoginScreen(
-            modifier = Modifier.fillMaxSize().padding(it),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
             activity = PreviewComponentActivity
         )
     }

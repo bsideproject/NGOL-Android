@@ -20,6 +20,7 @@ include(
     ":app",
     ":core:data",
     ":core:remote",
+    ":core:config",
     ":common:di",
     ":common:design-system",
     ":common:ui",

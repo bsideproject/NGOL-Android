@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.data)
     implementation(projects.common.designSystem)
     implementation(projects.common.ui)
     implementation(projects.feature.socialLogin)
@@ -63,7 +64,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material.compose)
     implementation(libs.coil)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

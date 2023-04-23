@@ -14,14 +14,26 @@ class LoginInActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NuguollimTheme {
-                LoginRoute{
-                    val intent = Intent(this, SignUpActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    startActivity(intent)
+                LoginRoute(
+                    onStartSignUp = { provideType, provideId ->
+                        val intent = Intent(this, SignUpActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        intent.putExtra("provideType", provideType)
+                        intent.putExtra("provideId", provideId)
+                        startActivity(intent)
 
-                    finish()
-                }
+                        finish()
+                    },
+                    onNavigateToHome = {
+                        val intent = Intent(this, HomeActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        startActivity(intent)
+
+                        finish()
+                    }
+                )
             }
         }
     }
