@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TermsService {
-    @GET("v1/terms")
+    @GET(value = "v1/terms")
     fun getTermsList(
         @Query("active") active: Boolean? = null,
         @Query("termsTitle") termsTitle: String? = null,
