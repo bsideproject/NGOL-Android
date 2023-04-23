@@ -23,15 +23,21 @@ class AuthRepositoryImpl @Inject constructor(
     override fun signup(body: RequestBody): Flow<SignUpData> =
         authRemoteDataSource.signup(body).map { it.asExternalModel() }
 
+    override fun getAuthInfo(): Flow<AuthInfo> = authLocalDataSource.getAuthInfo().map { authInfo ->
+        AuthInfo(
+            provideType = authInfo.provideType,
+            provideId = authInfo.provideId,
+        )
+    }
+
     override suspend fun setAuthInfo(provideType: String, provideId: String) {
         authLocalDataSource.setAuthInfo(provideType, provideId)
     }
 
-    override fun getAuthInfo(): Flow<AuthInfo> = authLocalDataSource.getAuthInfo().map { authInfo ->
-        AuthInfo(
-            provideType = authInfo.provideType,
-            provideId = authInfo.provideId
-        )
+    override fun getProvideToken(): Flow<String?> = authLocalDataSource.getProvideToken()
+
+    override suspend fun setProvideToken(token: String) {
+        authLocalDataSource.setProvideToken(token)
     }
 
 }

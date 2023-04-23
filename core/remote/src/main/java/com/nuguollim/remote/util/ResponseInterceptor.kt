@@ -4,6 +4,7 @@ import com.nugu.exception.ResponseException
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.json.JSONObject
+import java.io.IOException
 
 class ResponseInterceptor : Interceptor {
 
@@ -12,11 +13,15 @@ class ResponseInterceptor : Interceptor {
         val response = chain.proceed(request)
 
         if (!response.isSuccessful) {
-            val responseBody = JSONObject(response.body?.string())
-            val errorMessage = responseBody.getStringOrNull("message")
-            val errorCode = responseBody.getStringOrNull("errorCode")
+            runCatching {
+                val responseBody = JSONObject(response.body!!.string())
+                val errorMessage = responseBody.getStringOrNull("message")
+                val errorCode = responseBody.getStringOrNull("errorCode")
 
-            throw ResponseException(errorMessage, errorCode)
+                Pair(errorMessage, errorCode)
+            }.onSuccess { (errorMessage, errorCode) ->
+                throw ResponseException(errorMessage, errorCode)
+            }.onFailure { throw IOException(it) }
         }
 
         return response

@@ -26,4 +26,5 @@ dependencies {
     implementation(projects.common.di)
     implementation(projects.common.exception)
     implementation(projects.common.data)
+    implementation(projects.core.config)
 }

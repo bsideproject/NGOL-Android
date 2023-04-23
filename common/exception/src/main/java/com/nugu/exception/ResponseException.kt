@@ -6,4 +6,10 @@ import java.io.IOException
 class ResponseException(
     val errorMessage: String?,
     val errorCode: String?
-) : IOException(errorMessage)
+) : IOException(errorMessage) {
+
+    companion object {
+        const val ERROR_CODE_USER_ERROR = "USER-ERR"
+    }
+
+}

@@ -6,7 +6,18 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -30,7 +41,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.navercorp.nid.NaverIdLoginSDK
 import com.nugu.nuguollim.design_system.R
-import com.nugu.nuguollim.design_system.theme.*
+import com.nugu.nuguollim.design_system.theme.Gray1
+import com.nugu.nuguollim.design_system.theme.Gray2
+import com.nugu.nuguollim.design_system.theme.Gray3
+import com.nugu.nuguollim.design_system.theme.KakaoTextBlack
+import com.nugu.nuguollim.design_system.theme.pretendard
 import com.nugu.social_login.login.GoogleLogin
 import com.nugu.social_login.login.KakaoLogin
 import com.nugu.social_login.login.NaverLogin
@@ -49,7 +64,7 @@ fun KakaoLoginButton(
             onLoginFail(error)
         }
         if (token != null) {
-            onLoginSuccess(token)
+            kakaoLogin?.getId { onLoginSuccess(it) }
         }
     }
 
@@ -92,8 +107,7 @@ fun NaverLoginButton(
         onResult = { result ->
             when (result.resultCode) {
                 Activity.RESULT_OK -> {
-                    val token = NaverIdLoginSDK.getAccessToken()
-                    onLoginSuccess(token)
+                    naverLogin?.getId { onLoginSuccess(it) }
                 }
                 Activity.RESULT_CANCELED -> {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
@@ -146,8 +160,8 @@ fun GoogleLoginButton(
                 GoogleSignIn.getSignedInAccountFromIntent(intent)
 
             try {
-                completedTask.getResult(ApiException::class.java)?.also { account ->
-                    onLoginSuccess(account.idToken)
+                completedTask.getResult(ApiException::class.java)?.also {
+                    googleLogin?.getId(activity) { onLoginSuccess(it) }
                 }
             } catch (e: ApiException) {
                 onLoginFail(e.statusCode, e.message)

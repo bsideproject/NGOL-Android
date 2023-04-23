@@ -12,8 +12,12 @@ interface AuthRepository {
 
     fun signup(body: RequestBody): Flow<SignUpData>
 
+    fun getAuthInfo(): Flow<AuthInfo>
+
     suspend fun setAuthInfo(provideType: String, provideId: String)
 
-    fun getAuthInfo(): Flow<AuthInfo>
+    fun getProvideToken(): Flow<String?>
+
+    suspend fun setProvideToken(token: String)
 
 }

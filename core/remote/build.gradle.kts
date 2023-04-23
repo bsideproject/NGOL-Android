@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(projects.common.exception)
     implementation(projects.common.data)
+    implementation(projects.core.config)
 
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)
