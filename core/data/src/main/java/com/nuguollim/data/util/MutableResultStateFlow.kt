@@ -5,4 +5,4 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 fun <T> mutableResultStateFlow(
     value: ResultState<T> = ResultState.Loading
-): MutableStateFlow<ResultState<T>> = MutableStateFlow(ResultState.Loading)
+): MutableStateFlow<ResultState<T>> = MutableStateFlow(value)
