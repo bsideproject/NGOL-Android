@@ -19,6 +19,8 @@ dependencies {
     implementation(libs.system.ui.controller)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.hilt.navigation)
+    testImplementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.compose)
 
     implementation(projects.common.designSystem)
     implementation(projects.feature.socialLogin)

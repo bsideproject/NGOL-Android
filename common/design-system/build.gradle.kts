@@ -18,4 +18,6 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.system.ui.controller)
     implementation(libs.androidx.compose.navigation)
+
+    implementation(projects.common.data)
 }

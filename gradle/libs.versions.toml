@@ -11,6 +11,8 @@ androidxComposeCompiler = "1.3.1"
 androidxMaterialCompose = "1.3.1"
 androidxComposeNavigation = "2.5.3"
 androidxComposeHiltNavigation = "1.0.0"
+androidxPaging = "3.1.1"
+androidxPagingCompose = "1.0.0-alpha14"
 systemUiController = "0.28.0"
 dataStore = "1.0.0"
 coroutine = "1.6.4"
@@ -63,6 +65,9 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "androidxCompose" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidxCompose" }
 androidx-material-compose = { module = "androidx.compose.material:material", version.ref = "androidxMaterialCompose" }
+androidx-paging = { module = "androidx.paging:paging-runtime", version.ref = "androidxPaging" }
+androidx-paging-common = { module = "androidx.paging:paging-common-ktx", version.ref = "androidxPaging" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "androidxPagingCompose" }
 system-ui-controller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "systemUiController" }
 data-store = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 data-store-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "dataStore" }

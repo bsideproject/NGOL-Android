@@ -3,7 +3,6 @@ package com.nugu.nuguollim.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -19,7 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.nugu.nuguollim.common.data.model.template.HomeTemplate
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import com.nugu.nuguollim.common.data.model.template.Template
+import com.nugu.nuguollim.common.data.model.template.TemplateSort
 import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
 import com.nugu.nuguollim.design_system.component.NuguDropDownMenu
 import com.nugu.nuguollim.design_system.component.NuguSearchTextField
@@ -28,6 +32,7 @@ import com.nugu.nuguollim.design_system.theme.Black
 import com.nugu.nuguollim.design_system.theme.Primary500
 import com.nugu.nuguollim.design_system.theme.pretendard
 import com.nugu.nuguollim.ui.R
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun HomeRoute(
@@ -37,9 +42,17 @@ fun HomeRoute(
     Scaffold(
         bottomBar = { NuguBottomNavigation(navController = navController) }
     ) { innerPadding ->
+        val currentTemplates = viewModel.templatePaging.collectAsLazyPagingItems()
+
+        LaunchedEffect(Unit){
+            viewModel.refreshTemplatePaging()
+        }
 
         HomeScreen(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            templatePaging = currentTemplates,
+            onSortChanged = { viewModel.setSort(it.sortText) },
+            onSearchText = { viewModel.setKeyword(it) }
         )
     }
 }
@@ -47,39 +60,21 @@ fun HomeRoute(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    homeTemplates: List<HomeTemplate> = listOf(),
-    onTemplateClick: (HomeTemplate) -> Unit = {},
+    templatePaging: LazyPagingItems<Template> = flowOf(PagingData.from(listOf<Template>())).collectAsLazyPagingItems(),
+    onSortChanged: (TemplateSort) -> Unit = {},
+    onTemplateClick: (Template) -> Unit = {},
     onSearchText: (String) -> Unit = {}
 ) {
-    var searchText by remember { mutableStateOf("") }
-    var sortedKey by remember { mutableStateOf("인기순") }
-    val sortedTemplates by remember {
-        mutableStateOf(
-            homeTemplates.toList().sortedBy { it.viewCount }
-        )
-    }
-
     Column(
         modifier = modifier
     ) {
         HomeSearchBar(
-            text = searchText,
-            onValueChange = { searchText = it },
             onSearchText = onSearchText
         )
         HomeSearchListMenu(
-            items = sortedTemplates,
+            templatePaging = templatePaging,
             onItemClicked = onTemplateClick,
-            onSortChanged = {
-                if (it != sortedKey) {
-                    if (it == "인기순") {
-                        sortedTemplates.sortedBy { template -> template.viewCount }
-                    } else if (it == "최신순") {
-                        sortedTemplates.sortedBy { template -> template.date }
-                    }
-                    sortedKey = it
-                }
-            }
+            onSortChanged = onSortChanged
         )
     }
 }
@@ -87,8 +82,6 @@ fun HomeScreen(
 @Composable
 fun HomeSearchBar(
     modifier: Modifier = Modifier,
-    text: String = "",
-    onValueChange: (String) -> Unit = {},
     onSearchText: (String) -> Unit = {}
 ) {
     Column(
@@ -131,8 +124,6 @@ fun HomeSearchBar(
 
         NuguSearchTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = text,
-            onValueChange = onValueChange,
             onSearchText = onSearchText
         )
     }
@@ -141,10 +132,12 @@ fun HomeSearchBar(
 @Composable
 fun HomeSearchListMenu(
     modifier: Modifier = Modifier,
-    items: List<HomeTemplate> = listOf(),
-    onSortChanged: (String) -> Unit = {},
-    onItemClicked: (HomeTemplate) -> Unit = {}
+    templatePaging: LazyPagingItems<Template> = flowOf(PagingData.from(listOf<Template>())).collectAsLazyPagingItems(),
+    onSortChanged: (TemplateSort) -> Unit = {},
+    onItemClicked: (Template) -> Unit = {}
 ) {
+    var title by remember { mutableStateOf(TemplateSort.values().first().title) }
+
     Column(
         modifier = modifier
             .background(Color.White)
@@ -156,26 +149,32 @@ fun HomeSearchListMenu(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(id = R.string.description_template_list),
+                text = title,
                 fontFamily = pretendard,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = Black
             )
             NuguDropDownMenu(
-                items = listOf("인기순", "최신순"),
-                onSelectItem = { onSortChanged(it) }
+                items = TemplateSort.values().toList(),
+                onSelectItem = {
+                    title = it.title
+                    onSortChanged(it)
+                }
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(items) { item ->
+            items(
+                items = templatePaging,
+                key = { it.id }
+            ) { item ->
                 NuguTemplateItem(
-                    label = item.theme,
-                    content = item.content,
-                    onClick = { onItemClicked(item) }
+                    label = item?.theme ?: "",
+                    content = item?.content ?: "",
+                    onClick = { item?.let(onItemClicked) }
                 )
             }
         }
@@ -186,26 +185,26 @@ fun HomeSearchListMenu(
 @Composable
 private fun HomeScreenPreview() {
     val items = remember {
-        mutableStateListOf<HomeTemplate>().apply {
+        mutableStateListOf<Template>().apply {
             repeat(50) {
                 add(
-                    HomeTemplate(
-                        0,
-                        "교수님 안녕하세요?\n" +
+                    Template(
+                        id = 0,
+                        content = "교수님 안녕하세요?\n" +
                                 "저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
                                 "다름이 아니라, 교수님 안녕하세요? 저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
                                 "다름이 아니라, ",
-                        "문의/답변"
+                        theme = "문의/답변"
                     )
                 )
                 add(
-                    HomeTemplate(
-                        0,
-                        "교수님 안녕하세요?\n" +
+                    Template(
+                        id = 0,
+                        content = "교수님 안녕하세요?\n" +
                                 "저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
                                 "다름이 아니라, 교수님 안녕하세요? 저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
                                 "다름이 아니라, ",
-                        "상담 문의"
+                        theme = "상담 문의"
                     )
                 )
             }
@@ -219,7 +218,7 @@ private fun HomeScreenPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HomeScreen(
-            homeTemplates = items
+            templatePaging = flowOf(PagingData.from(items)).collectAsLazyPagingItems()
         )
     }
 }

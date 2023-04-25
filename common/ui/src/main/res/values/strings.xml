@@ -2,5 +2,4 @@
 <resources>
     <string name="description_login">3초안에 가입하고, 누구올림에 올라온 n개의 메시지\n를 무제한으로 누려보세요</string>
     <string name="description_home">다양한 문구 템플릿은\n누구올림에서</string>
-    <string name="description_template_list">지금 가장 HOT한 템플릿</string>
 </resources>
