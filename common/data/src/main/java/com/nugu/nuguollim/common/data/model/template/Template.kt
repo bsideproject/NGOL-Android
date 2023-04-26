@@ -6,6 +6,6 @@ data class Template(
     val viewCount: Long = 0,
     val target: String = "",
     val theme: String,
-    val background: String = "",
+    val background: String? = null,
     val favorite: Boolean = false
 )

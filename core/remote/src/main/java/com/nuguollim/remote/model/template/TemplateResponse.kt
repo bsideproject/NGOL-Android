@@ -8,7 +8,7 @@ data class TemplateResponse(
     val viewCount: Long,
     val target: String,
     val theme: String,
-    val background: String,
+    val background: String?,
     val favorite: Boolean
 )
 
