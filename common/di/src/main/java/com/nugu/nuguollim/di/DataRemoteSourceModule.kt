@@ -2,6 +2,8 @@ package com.nugu.nuguollim.di
 
 import com.nuguollim.remote.data_source.auth.AuthRemoteDataSource
 import com.nuguollim.remote.data_source.auth.AuthRemoteDataSourceImpl
+import com.nuguollim.remote.data_source.template.TemplateRemoteDataSource
+import com.nuguollim.remote.data_source.template.TemplateRemoteDataSourceImpl
 import com.nuguollim.remote.data_source.terms.TermsRemoteDataSource
 import com.nuguollim.remote.data_source.terms.TermsRemoteDataSourceImpl
 import dagger.Binds
@@ -18,5 +20,8 @@ interface DataRemoteSourceModule {
 
     @Binds
     fun bindsTermsRemoteDataSource(termsRemoteDataSource: TermsRemoteDataSourceImpl): TermsRemoteDataSource
+
+    @Binds
+    fun bindsTemplateRemoteDataSource(templateRemoteDataSource: TemplateRemoteDataSourceImpl): TemplateRemoteDataSource
 
 }

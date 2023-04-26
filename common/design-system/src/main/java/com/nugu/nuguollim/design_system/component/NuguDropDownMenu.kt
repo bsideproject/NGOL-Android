@@ -16,17 +16,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nugu.nuguollim.common.data.model.template.TemplateSort
 import com.nugu.nuguollim.design_system.R
 import com.nugu.nuguollim.design_system.theme.Gray800
 import com.nugu.nuguollim.design_system.theme.pretendard
 
 @Composable
 fun NuguDropDownMenu(
-    items: List<String> = listOf(),
-    onSelectItem: (String) -> Unit = {}
+    items: List<TemplateSort> = listOf(),
+    onSelectItem: (TemplateSort) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(items.firstOrNull() ?: "") }
+    var selected by remember { mutableStateOf(items.firstOrNull() ?: TemplateSort.NEW) }
     var dropDownWidth by remember { mutableStateOf(0) }
     val expandedIconId =
         if (expanded) R.drawable.ic_drop_down_less else R.drawable.ic_drop_down_more
@@ -40,7 +41,7 @@ fun NuguDropDownMenu(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = selected,
+                text = selected.value,
                 fontFamily = pretendard,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
@@ -71,7 +72,7 @@ fun NuguDropDownMenu(
                     }
                 ) {
                     Text(
-                        text = item,
+                        text = item.value,
                         fontFamily = pretendard,
                         fontWeight = FontWeight.Normal,
                         fontSize = 14.sp,
@@ -94,7 +95,7 @@ private fun NuguDropDownMenuPreview() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         NuguDropDownMenu(
-            items = listOf("인기순", "최신순")
+            items = TemplateSort.values().toList()
         )
     }
 }
