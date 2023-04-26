@@ -3,6 +3,8 @@ package com.nugu.nuguollim.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -43,10 +46,6 @@ fun HomeRoute(
         bottomBar = { NuguBottomNavigation(navController = navController) }
     ) { innerPadding ->
         val currentTemplates = viewModel.templatePaging.collectAsLazyPagingItems()
-
-        LaunchedEffect(Unit){
-            viewModel.refreshTemplatePaging()
-        }
 
         HomeScreen(
             modifier = Modifier.padding(innerPadding),
@@ -167,10 +166,22 @@ fun HomeSearchListMenu(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(
-                items = templatePaging,
-                key = { it.id }
-            ) { item ->
+            when (val state = templatePaging.loadState.refresh) {
+                is LoadState.NotLoading -> Unit
+                LoadState.Loading -> Loading()
+                is LoadState.Error -> Unit
+            }
+            when (val state = templatePaging.loadState.append) {
+                is LoadState.NotLoading -> Unit
+                LoadState.Loading -> Loading()
+                is LoadState.Error -> Unit
+            }
+            when (val state = templatePaging.loadState.prepend) {
+                is LoadState.NotLoading -> Unit
+                LoadState.Loading -> Loading()
+                is LoadState.Error -> Unit
+            }
+            items(items = templatePaging) { item ->
                 NuguTemplateItem(
                     label = item?.theme ?: "",
                     content = item?.content ?: "",
@@ -178,6 +189,12 @@ fun HomeSearchListMenu(
                 )
             }
         }
+    }
+}
+
+private fun LazyListScope.Loading() {
+    item {
+        CircularProgressIndicator(modifier = Modifier.padding(16.dp))
     }
 }
 
@@ -199,7 +216,7 @@ private fun HomeScreenPreview() {
                 )
                 add(
                     Template(
-                        id = 0,
+                        id = 1,
                         content = "교수님 안녕하세요?\n" +
                                 "저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
                                 "다름이 아니라, 교수님 안녕하세요? 저는 2023년도 1학기 <누구올림의 이해> 수업을 수강 중인 경제학과 정느리라고 합니다.\n" +
