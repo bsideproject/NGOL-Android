@@ -11,8 +11,12 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,22 +30,28 @@ import com.nugu.nuguollim.design_system.theme.Gray300
 import com.nugu.nuguollim.design_system.theme.Gray400
 import com.nugu.nuguollim.design_system.theme.pretendard
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NuguSearchTextField(
     modifier: Modifier = Modifier,
-    text: String = "",
-    onValueChange: (String) -> Unit = {},
     onSearchText: (String) -> Unit = {}
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+
+    var searchText by remember { mutableStateOf("") }
     val leadingPainter = painterResource(id = R.drawable.ic_search)
 
     Column(
         modifier = modifier
     ) {
         BasicTextField(
-            modifier = Modifier.fillMaxWidth().height(46.dp),
-            value = text,
-            onValueChange = { onValueChange(it) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(46.dp)
+                .focusRequester(focusRequester),
+            value = searchText,
+            onValueChange = { searchText = it },
             maxLines = 1,
             singleLine = true,
             textStyle = TextStyle(
@@ -73,7 +83,7 @@ fun NuguSearchTextField(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
 
-                    if (text.isEmpty()) {
+                    if (searchText.isEmpty()) {
                         Text(
                             text = "검색어를 입력해주세요.",
                             fontFamily = pretendard,
@@ -89,7 +99,12 @@ fun NuguSearchTextField(
                 keyboardType = KeyboardType.Text
             ),
             keyboardActions = KeyboardActions(
-                onSearch = {onSearchText(text)}
+                onSearch = {
+                    onSearchText(searchText)
+
+                    keyboardController?.hide()
+                    focusRequester.freeFocus()
+                }
             )
         )
     }
@@ -98,17 +113,12 @@ fun NuguSearchTextField(
 @Preview(showBackground = true, widthDp = 360, heightDp = 480)
 @Composable
 private fun NuguSearchTextFieldPreview() {
-    var text by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NuguSearchTextField(
-            text = text,
-            onValueChange = { text = it }
-        )
+        NuguSearchTextField()
     }
 }
