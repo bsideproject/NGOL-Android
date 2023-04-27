@@ -1,6 +1,6 @@
 package com.nuguollim.data.usecase.auth
 
-import com.nuguollim.data.model.auth.TokenData
+import com.nugu.nuguollim.common.data.model.auth.TokenData
 import com.nuguollim.data.repository.auth.AuthRepository
 import com.nuguollim.data.state.ResultState
 import com.nuguollim.data.state.resultStateFlow

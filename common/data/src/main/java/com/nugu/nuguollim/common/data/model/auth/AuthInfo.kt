@@ -1,4 +1,4 @@
-package com.nuguollim.data.model.auth
+package com.nugu.nuguollim.common.data.model.auth
 
 data class AuthInfo(
     val provideType: String,

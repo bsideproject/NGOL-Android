@@ -6,7 +6,7 @@ import com.nugu.social_login.login.GoogleLogin
 import com.nugu.social_login.login.KakaoLogin
 import com.nugu.social_login.login.NaverLogin
 import com.nugu.social_login.login.SocialLoginFactory
-import com.nuguollim.data.model.auth.TokenData
+import com.nugu.nuguollim.common.data.model.auth.TokenData
 import com.nuguollim.data.state.ResultState
 import com.nuguollim.data.usecase.auth.AuthProvide
 import com.nuguollim.data.usecase.auth.CreateTokenUseCase

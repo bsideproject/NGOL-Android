@@ -34,8 +34,8 @@ import com.nugu.nuguollim.design_system.theme.Gray700
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.search.R
 import com.nugu.ui_core.singleClick
-import com.nuguollim.data.model.search.target.TemplateTargetData
-import com.nuguollim.data.model.search.target.ThemeData
+import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
+import com.nugu.nuguollim.common.data.model.search.target.ThemeData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

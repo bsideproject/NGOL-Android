@@ -8,7 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.nugu.nuguollim.di.IoDispatcher
 import com.nugu.paging.template.TemplatePagingSource
-import com.nuguollim.data.model.search.target.TemplateTargetData
+import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
 import com.nuguollim.data.state.resultStateFlow
 import com.nuguollim.data.usecase.search.GetTemplatesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

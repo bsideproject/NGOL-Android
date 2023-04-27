@@ -1,8 +1,8 @@
 package com.nuguollim.data.repository.auth
 
-import com.nuguollim.data.model.auth.AuthInfo
-import com.nuguollim.data.model.auth.SignUpData
-import com.nuguollim.data.model.auth.TokenData
+import com.nugu.nuguollim.common.data.model.auth.AuthInfo
+import com.nugu.nuguollim.common.data.model.auth.SignUpData
+import com.nugu.nuguollim.common.data.model.auth.TokenData
 import kotlinx.coroutines.flow.Flow
 import okhttp3.RequestBody
 

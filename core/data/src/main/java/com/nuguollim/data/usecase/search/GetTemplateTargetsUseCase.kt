@@ -1,6 +1,6 @@
 package com.nuguollim.data.usecase.search
 
-import com.nuguollim.data.model.search.target.TemplateTargetData
+import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
 import com.nuguollim.data.repository.seach.SearchRepository
 import com.nuguollim.data.state.ResultState
 import com.nuguollim.data.state.resultStateFlow

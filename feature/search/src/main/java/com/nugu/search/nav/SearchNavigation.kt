@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import com.nugu.ui_core.extension.serializableOrNull
-import com.nuguollim.data.model.search.target.TemplateTargetData
+import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
 
 private const val NAVIGATION_ROUTE_TARGET = "target"
 private const val NAVIGATION_ROUTE_THEME = "theme/{data}"

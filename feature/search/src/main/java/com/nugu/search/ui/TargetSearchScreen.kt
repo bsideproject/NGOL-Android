@@ -20,8 +20,8 @@ import com.nugu.nuguollim.design_system.component.NuguChip
 import com.nugu.nuguollim.design_system.component.PretendardText
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.ui_core.singleClick
-import com.nuguollim.data.model.search.target.TemplateTargetData
-import com.nuguollim.data.model.search.target.ThemeData
+import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
+import com.nugu.nuguollim.common.data.model.search.target.ThemeData
 
 @Composable
 fun TargetSearchScreen(

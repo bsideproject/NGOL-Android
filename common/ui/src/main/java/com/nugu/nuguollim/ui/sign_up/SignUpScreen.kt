@@ -38,7 +38,7 @@ import com.nugu.nuguollim.design_system.component.NuguNameTextField
 import com.nugu.nuguollim.design_system.component.TermsCheckBox
 import com.nugu.nuguollim.design_system.theme.pretendard
 import com.nugu.nuguollim.ui.DevicePreviews
-import com.nuguollim.data.model.auth.TokenData
+import com.nugu.nuguollim.common.data.model.auth.TokenData
 import com.nuguollim.data.state.ResultState
 import com.nuguollim.data.usecase.auth.AuthProvide
 

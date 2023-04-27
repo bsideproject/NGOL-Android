@@ -31,8 +31,8 @@ import com.nugu.social_login.login.NaverLogin
 import com.nugu.social_login.login.ui.GoogleLoginButton
 import com.nugu.social_login.login.ui.KakaoLoginButton
 import com.nugu.social_login.login.ui.NaverLoginButton
-import com.nuguollim.data.model.auth.AuthInfo
-import com.nuguollim.data.model.auth.TokenData
+import com.nugu.nuguollim.common.data.model.auth.AuthInfo
+import com.nugu.nuguollim.common.data.model.auth.TokenData
 import com.nuguollim.data.state.ResultState
 import com.nuguollim.data.usecase.auth.AuthProvide
 

@@ -2,8 +2,8 @@ package com.nugu.nuguollim.ui.sign_up
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nuguollim.data.model.auth.SignUpData
-import com.nuguollim.data.model.auth.TokenData
+import com.nugu.nuguollim.common.data.model.auth.SignUpData
+import com.nugu.nuguollim.common.data.model.auth.TokenData
 import com.nuguollim.data.repository.terms.TermsRepositoryImpl
 import com.nuguollim.data.usecase.auth.AuthProvide
 import com.nuguollim.data.usecase.auth.CreateTokenUseCase
