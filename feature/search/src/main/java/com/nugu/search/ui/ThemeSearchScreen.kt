@@ -1,7 +1,6 @@
 package com.nugu.search.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -24,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
+import com.nugu.nuguollim.common.data.model.search.target.ThemeData
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.TemplateSort
 import com.nugu.nuguollim.design_system.component.NuguChip
@@ -34,8 +35,6 @@ import com.nugu.nuguollim.design_system.theme.Gray700
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.search.R
 import com.nugu.ui_core.singleClick
-import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
-import com.nugu.nuguollim.common.data.model.search.target.ThemeData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -44,7 +43,8 @@ fun ThemeSearchScreen(
     targetData: TemplateTargetData,
     templatesData: Flow<PagingData<Template>>,
     onSortChanged: (TemplateSort) -> Unit,
-    onThemeSelectChanged: (Int?) -> Unit
+    onThemeSelectChanged: (Int?) -> Unit,
+    onFavorite: (Long, Boolean) -> Unit,
 ) {
     val templates = templatesData.collectAsLazyPagingItems()
     var isCheckThemeId by remember { mutableStateOf<Int?>(null) }
@@ -95,14 +95,18 @@ fun ThemeSearchScreen(
         LazyColumn {
             items(templates) { contentData ->
                 if (contentData != null) {
-                    Box {
-                        NuguTemplateItem(
-                            modifier = Modifier.height(122.dp),
-                            label = contentData.theme,
-                            content = contentData.content
-                        )
-                    }
+                    var isFavorite by remember { mutableStateOf(contentData.favorite) }
 
+                    NuguTemplateItem(
+                        modifier = Modifier.height(122.dp),
+                        label = contentData.theme,
+                        content = contentData.content,
+                        isFavorite = isFavorite,
+                        onClickFavorite = {
+                            isFavorite = !isFavorite
+                            onFavorite.invoke(contentData.id, isFavorite)
+                        }
+                    )
                     Spacer(Modifier.padding(6.dp))
                 }
             }
@@ -141,6 +145,7 @@ private fun ThemeSearchScreenPreview() {
             templatesData = flowOf(PagingData.from(listOf())),
             onSortChanged = {},
             onThemeSelectChanged = {},
+            onFavorite = { _, _ -> }
         )
     }
 }

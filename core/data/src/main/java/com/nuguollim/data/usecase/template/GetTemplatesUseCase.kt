@@ -1,4 +1,4 @@
-package com.nuguollim.data.usecase.search
+package com.nuguollim.data.usecase.template
 
 import com.nugu.nuguollim.common.data.model.template.AllTemplate
 import com.nuguollim.data.repository.template.TemplateRepository

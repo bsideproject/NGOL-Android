@@ -7,15 +7,20 @@ import com.nugu.nuguollim.common.data.model.template.AllTemplate
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.TemplateSort
 import com.nuguollim.data.repository.template.TemplateRepositoryImpl
+import com.nuguollim.data.usecase.template.AddFavoriteUseCase
+import com.nuguollim.data.usecase.template.RemoveFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val templateRepository: TemplateRepositoryImpl
+    private val templateRepository: TemplateRepositoryImpl,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
 ) : ViewModel() {
 
     private val _pagingSource = MutableStateFlow(getTemplatePagingSource())
@@ -40,6 +45,14 @@ class HomeViewModel @Inject constructor(
         this.sort = sort
 
         _pagingSource.value = getTemplatePagingSource()
+    }
+
+    fun addFavorite(id: Long) {
+        viewModelScope.launch { addFavoriteUseCase.run(id) }
+    }
+
+    fun removeFavorite(id: Long) {
+        viewModelScope.launch { removeFavoriteUseCase.run(id) }
     }
 
     private fun getTemplatePagingSource(): PagingSource<Int, Template> {

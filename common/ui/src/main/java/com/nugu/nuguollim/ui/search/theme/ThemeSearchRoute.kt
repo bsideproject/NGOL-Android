@@ -28,7 +28,14 @@ fun ThemeSearchRoute(
             targetData = viewModel.targetData,
             templatesData = (templates as ResultState.Success<Flow<PagingData<Template>>>).successData,
             onSortChanged = { viewModel.updateSort(it.sortText) },
-            onThemeSelectChanged = { viewModel.updateTheme(it) }
+            onThemeSelectChanged = { viewModel.updateTheme(it) },
+            onFavorite = { id, isFavorite ->
+                if (isFavorite) {
+                    viewModel.addFavorite(id)
+                } else {
+                    viewModel.removeFavorite(id)
+                }
+            }
         )
         null -> Unit
     }

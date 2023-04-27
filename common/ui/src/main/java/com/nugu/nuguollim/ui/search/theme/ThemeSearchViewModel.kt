@@ -6,11 +6,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
 import com.nugu.nuguollim.di.IoDispatcher
 import com.nugu.paging.template.TemplatePagingSource
-import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
 import com.nuguollim.data.state.resultStateFlow
-import com.nuguollim.data.usecase.search.GetTemplatesUseCase
+import com.nuguollim.data.usecase.template.AddFavoriteUseCase
+import com.nuguollim.data.usecase.template.GetTemplatesUseCase
+import com.nuguollim.data.usecase.template.RemoveFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import javax.inject.Inject
 
@@ -28,6 +31,8 @@ class ThemeSearchViewModel @Inject constructor(
     stateSavedStateHandle: SavedStateHandle,
     private val templatePagingSourceFactory: TemplatePagingSource.Factory,
     private val getTemplatesUseCase: GetTemplatesUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -65,6 +70,14 @@ class ThemeSearchViewModel @Inject constructor(
 
     fun updateTheme(themeId: Int?) {
         _templatesParams.update { it.copy(themeId = themeId?.toLong()) }
+    }
+
+    fun addFavorite(id: Long) {
+        viewModelScope.launch { addFavoriteUseCase.run(id) }
+    }
+
+    fun removeFavorite(id: Long) {
+        viewModelScope.launch { removeFavoriteUseCase.run(id) }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.nuguollim.remote.data_source.template
 
 import com.nuguollim.remote.model.template.AllTemplateResponse
+import com.nuguollim.remote.model.template.FavoriteResponse
 
 interface TemplateRemoteDataSource {
 
@@ -11,5 +12,9 @@ interface TemplateRemoteDataSource {
         sort: String,
         keyword: String?
     ): AllTemplateResponse
+
+    suspend fun addFavorite(id: Long): FavoriteResponse
+
+    suspend fun removeFavorite(id: Long): FavoriteResponse
 
 }

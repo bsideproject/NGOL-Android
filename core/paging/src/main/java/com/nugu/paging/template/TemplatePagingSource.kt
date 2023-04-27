@@ -3,7 +3,7 @@ package com.nugu.paging.template
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.nugu.nuguollim.common.data.model.template.Template
-import com.nuguollim.data.usecase.search.GetTemplatesUseCase
+import com.nuguollim.data.usecase.template.GetTemplatesUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
