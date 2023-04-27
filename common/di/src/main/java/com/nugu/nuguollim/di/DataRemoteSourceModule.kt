@@ -4,6 +4,8 @@ import com.nuguollim.remote.data_source.auth.AuthRemoteDataSource
 import com.nuguollim.remote.data_source.auth.AuthRemoteDataSourceImpl
 import com.nuguollim.remote.data_source.template.TemplateRemoteDataSource
 import com.nuguollim.remote.data_source.template.TemplateRemoteDataSourceImpl
+import com.nuguollim.remote.data_source.search.SearchRemoteDataSource
+import com.nuguollim.remote.data_source.search.SearchRemoteDataSourceImpl
 import com.nuguollim.remote.data_source.terms.TermsRemoteDataSource
 import com.nuguollim.remote.data_source.terms.TermsRemoteDataSourceImpl
 import dagger.Binds
@@ -23,5 +25,8 @@ interface DataRemoteSourceModule {
 
     @Binds
     fun bindsTemplateRemoteDataSource(templateRemoteDataSource: TemplateRemoteDataSourceImpl): TemplateRemoteDataSource
+
+    @Binds
+    fun bindsSearchRemoteDataSource(searchRemoteDataSource: SearchRemoteDataSourceImpl): SearchRemoteDataSource
 
 }

@@ -5,6 +5,7 @@ pluginManagement {
         google()
         mavenCentral()
         maven("https://devrepo.kakao.com/nexus/content/groups/public/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 dependencyResolutionManagement {
@@ -13,6 +14,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://devrepo.kakao.com/nexus/content/groups/public/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 rootProject.name = "nuguollim"
@@ -21,12 +23,14 @@ include(
     ":core:data",
     ":core:remote",
     ":core:config",
+    ":core:data-store",
+    ":core:paging",
     ":common:di",
     ":common:design-system",
     ":common:ui",
+    ":common:ui-core",
     ":common:exception",
     ":common:data",
     ":feature:social-login",
     ":feature:search",
-    ":core:data-store",
 )

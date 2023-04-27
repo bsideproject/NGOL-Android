@@ -8,6 +8,18 @@ class TemplateRemoteDataSourceImpl @Inject constructor(
     private val templateService: TemplateService
 ) : TemplateRemoteDataSource {
 
-    override suspend fun getTemplates(page: Int, sort: String, keyword: String?): AllTemplateResponse =
-        templateService.getTemplates(page = page, sort = sort, keyword = keyword)
+    override suspend fun getTemplates(
+        targetId: Long?,
+        themeId: Long?,
+        page: Int,
+        sort: String,
+        keyword: String?
+    ): AllTemplateResponse =
+        templateService.getTemplates(
+            targetId = targetId,
+            themeId = themeId,
+            page = page,
+            sort = sort,
+            keyword = keyword,
+        )
 }

@@ -14,6 +14,7 @@ androidxComposeHiltNavigation = "1.0.0"
 androidxPaging = "3.1.1"
 androidxPagingCompose = "1.0.0-alpha14"
 systemUiController = "0.28.0"
+flowLayout = "0.31.0-alpha"
 dataStore = "1.0.0"
 coroutine = "1.6.4"
 okhttp = "4.10.0"
@@ -22,6 +23,7 @@ gson = "2.8.6"
 moshi = "1.14.0"
 moshiConverter = "2.9.0"
 coil = "2.2.2"
+lottie = "6.0.0"
 secretGradlePlugin = "2.0.1"
 json = "20230227"
 
@@ -71,6 +73,8 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 system-ui-controller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "systemUiController" }
 data-store = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 data-store-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "dataStore" }
+flow-layout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "flowLayout" }
+lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 

@@ -3,6 +3,7 @@ package com.nuguollim.data.usecase.auth
 import com.nuguollim.data.model.auth.TokenData
 import com.nuguollim.data.repository.auth.AuthRepository
 import com.nuguollim.data.state.ResultState
+import com.nuguollim.data.state.resultStateFlow
 import com.nuguollim.data.usecase.BaseUseCase
 import com.nuguollim.remote.util.toRequestBody
 import kotlinx.coroutines.flow.Flow

@@ -1,9 +1,9 @@
 package com.nuguollim.data.usecase.auth
 
-import com.nugu.nuguollim.common.data.model.terms.Terms
 import com.nuguollim.data.model.auth.SignUpData
 import com.nuguollim.data.repository.auth.AuthRepository
 import com.nuguollim.data.state.ResultState
+import com.nuguollim.data.state.resultStateFlow
 import com.nuguollim.data.usecase.BaseUseCase
 import com.nuguollim.remote.util.toRequestBody
 import kotlinx.coroutines.flow.Flow

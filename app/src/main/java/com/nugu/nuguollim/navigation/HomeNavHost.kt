@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nugu.nuguollim.design_system.component.NuguBottomNavItem
 import com.nugu.nuguollim.ui.home.HomeRoute
+import com.nugu.nuguollim.ui.search.SearchRoute
 
 
 /**
@@ -15,7 +16,6 @@ import com.nugu.nuguollim.ui.home.HomeRoute
 @Composable
 fun HomeNavHost(
     modifier: Modifier = Modifier,
-    onClickNextActivity: () -> Unit
 ) {
     val navController = rememberNavController()
 
@@ -25,7 +25,7 @@ fun HomeNavHost(
         startDestination = NuguBottomNavItem.Home.screenRoute
     ) {
         composable(NuguBottomNavItem.Home.screenRoute) { HomeRoute(navController) }
-        composable(NuguBottomNavItem.TemplateSearch.screenRoute) {}
+        composable(NuguBottomNavItem.TemplateSearch.screenRoute) { SearchRoute(navController) }
         composable(NuguBottomNavItem.Community.screenRoute) {}
     }
 }

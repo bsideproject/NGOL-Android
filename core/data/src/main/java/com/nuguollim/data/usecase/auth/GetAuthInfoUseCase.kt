@@ -3,6 +3,7 @@ package com.nuguollim.data.usecase.auth
 import com.nuguollim.data.model.auth.AuthInfo
 import com.nuguollim.data.repository.auth.AuthRepository
 import com.nuguollim.data.state.ResultState
+import com.nuguollim.data.state.resultStateFlow
 import com.nuguollim.data.usecase.BaseUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

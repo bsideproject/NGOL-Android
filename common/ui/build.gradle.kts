@@ -21,12 +21,16 @@ dependencies {
     implementation(libs.androidx.compose.hilt.navigation)
     testImplementation(libs.androidx.paging.common)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.gson)
 
-    implementation(projects.common.designSystem)
     implementation(projects.feature.socialLogin)
+    implementation(projects.feature.search)
     implementation(projects.core.data)
+    implementation(projects.core.paging)
+    implementation(projects.common.designSystem)
     implementation(projects.common.di)
     implementation(projects.common.exception)
     implementation(projects.common.data)
+    implementation(projects.common.uiCore)
     implementation(projects.core.config)
 }

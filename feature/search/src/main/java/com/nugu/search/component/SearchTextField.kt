@@ -1,4 +1,4 @@
-package com.nugu.search.ui.component
+package com.nugu.search.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -25,12 +25,12 @@ import com.nugu.nuguollim.design_system.theme.Primary500
 @Composable
 fun SearchTextField(
     value: String,
+    isFocused: Boolean = false,
     onValueChange: (String) -> Unit = {},
     placeHolder: String = "",
     onClear: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    var isFocused by remember { mutableStateOf(false) }
     val placeHolderStyle = PlaceHolderStyle(
         placeHolder = placeHolder,
         fontSize = 14.sp,
@@ -60,7 +60,6 @@ fun SearchTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 6.dp)
-                    .onFocusChanged { isFocused = it.isFocused }
             )
         }
 

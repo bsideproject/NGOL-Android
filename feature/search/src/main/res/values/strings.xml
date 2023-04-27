@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Search -->
+    <string name="description_search_theme_title">%1$s에게 올릴 편지를 골라볼까요?</string>
+    <string name="description_search_theme_tip">구체적인 상황을 선택하면 쉽게 찾을 수 있어요!</string>
+</resources>

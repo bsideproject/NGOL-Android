@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material.compose)
     implementation(libs.coil)
+    implementation(libs.lottie)
     implementation(libs.system.ui.controller)
     implementation(libs.androidx.compose.navigation)
 

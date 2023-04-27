@@ -9,8 +9,20 @@ class TemplateRepositoryImpl @Inject constructor(
     private val templateRemoteDataSource: TemplateRemoteDataSource
 ) : TemplateRepository {
 
-    override suspend fun getTemplates(page: Int, sort: String, keyword: String): AllTemplate =
+    override suspend fun getTemplates(
+        page: Int,
+        sort: String,
+        keyword: String?,
+        themeId: Long?,
+        targetId: Long?
+    ): AllTemplate =
         templateRemoteDataSource
-            .getTemplates(page = page, sort = sort, keyword = keyword)
+            .getTemplates(
+                targetId = targetId,
+                themeId = themeId,
+                page = page,
+                sort = sort,
+                keyword = keyword
+            )
             .asExternalModel()
 }

@@ -8,6 +8,8 @@ dependencies {
     implementation(projects.core.remote)
     implementation(projects.core.data)
     implementation(projects.common.designSystem)
+    implementation(projects.common.uiCore)
+    implementation(projects.common.data)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.lifecycle.runtime)
@@ -18,5 +20,11 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material.compose)
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.androidx.compose.hilt.navigation)
+    implementation(libs.androidx.paging)
+    implementation(libs.androidx.paging.compose)
     implementation(libs.coil)
+    implementation(libs.flow.layout)
+    implementation(libs.gson)
 }
