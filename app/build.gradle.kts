@@ -2,6 +2,7 @@ plugins {
     id("nuguollim.android.application")
     id("nuguollim.android.application.compose")
     id("nuguollim.android.hilt")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -29,9 +30,23 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0"
+    }
 }
 
 dependencies {
+    implementation(projects.core.data)
     implementation(projects.common.designSystem)
     implementation(projects.common.ui)
     implementation(projects.feature.socialLogin)

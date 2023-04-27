@@ -1,5 +1,6 @@
 package com.nugu.social_login.login
 
+import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
@@ -26,6 +27,10 @@ class GoogleLogin @AssistedInject constructor() {
         googleSignInClient = GoogleSignIn.getClient(activity, option)
 
         launcher.launch(googleSignInClient.signInIntent)
+    }
+
+    fun getId(context: Context, callback: (String) -> Unit) {
+        callback.invoke(GoogleSignIn.getLastSignedInAccount(context)?.id.toString())
     }
 
     fun logout() {

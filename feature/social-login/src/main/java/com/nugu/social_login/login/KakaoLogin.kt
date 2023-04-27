@@ -33,6 +33,10 @@ class KakaoLogin @AssistedInject constructor() {
         }
     }
 
+    fun getId(callback: (String) -> Unit) {
+        UserApiClient.instance.me { user, error -> callback.invoke(user?.id.toString()) }
+    }
+
     fun logout(callback: (Throwable?) -> Unit) {
         UserApiClient.instance.logout(callback)
     }
