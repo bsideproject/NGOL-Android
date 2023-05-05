@@ -8,7 +8,6 @@ data class TemplateResponse(
     val viewCount: Long,
     val target: String,
     val theme: String,
-    val background: String?,
     val favorite: Boolean
 )
 
@@ -18,6 +17,5 @@ fun TemplateResponse.asExternalModel() = Template(
     viewCount = viewCount,
     target = target,
     theme = theme,
-    background = background,
     favorite = favorite
 )

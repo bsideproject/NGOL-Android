@@ -32,6 +32,11 @@
             android:label="@string/title_activity_sign_up"
             android:theme="@style/Theme.Nuguollim" />
         <activity
+            android:name="com.nugu.nuguollim.MessageActivity"
+            android:exported="false"
+            android:label="@string/title_activity_message"
+            android:theme="@style/Theme.Nuguollim" />
+        <activity
             android:name="com.nugu.nuguollim.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
