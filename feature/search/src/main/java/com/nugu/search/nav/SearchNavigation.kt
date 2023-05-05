@@ -10,12 +10,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.gson.Gson
-import com.nugu.ui_core.extension.serializableOrNull
 import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
+import com.nugu.ui_core.extension.serializableOrNull
+import java.io.Serializable
 
-private const val NAVIGATION_ROUTE_TARGET = "target"
-private const val NAVIGATION_ROUTE_THEME = "theme/{data}"
-private const val NAVIGATION_ROUTE_TEMPLATE = "template"
+const val NAVIGATION_ROUTE_TARGET = "target"
+const val NAVIGATION_ROUTE_THEME = "theme/{data}"
+const val NAVIGATION_ROUTE_TEMPLATE = "template/{data}"
 
 sealed class SearchNavigation(val route: String) {
     object Target : SearchNavigation(NAVIGATION_ROUTE_TARGET)
@@ -31,6 +32,18 @@ class TargetType : NavType<TemplateTargetData>(isNullableAllowed = false) {
         Gson().fromJson(value, TemplateTargetData::class.java)
 
     override fun put(bundle: Bundle, key: String, value: TemplateTargetData) {
+        bundle.putSerializable(key, value)
+    }
+}
+
+class SearchParamsType : NavType<SearchParameterData>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): SearchParameterData? =
+        bundle.serializableOrNull(key)
+
+    override fun parseValue(value: String): SearchParameterData =
+        Gson().fromJson(value, SearchParameterData::class.java)
+
+    override fun put(bundle: Bundle, key: String, value: SearchParameterData) {
         bundle.putSerializable(key, value)
     }
 }
@@ -61,8 +74,18 @@ fun NavGraphBuilder.templateScreen(
 ) {
     composable(
         route = SearchNavigation.Template.route,
+        arguments = listOf(
+            navArgument("data") { type = SearchParamsType() }
+        ),
         content = content
     )
+}
+
+fun NavController.navigateToTarget() {
+    navigate(SearchNavigation.Target.route) {
+        launchSingleTop = true
+        popUpTo(NAVIGATION_ROUTE_TEMPLATE)
+    }
 }
 
 fun NavController.navigateToTheme(targetData: TemplateTargetData) {
@@ -72,3 +95,20 @@ fun NavController.navigateToTheme(targetData: TemplateTargetData) {
         popUpTo(NAVIGATION_ROUTE_TARGET)
     }
 }
+
+fun NavController.navigateToTemplate(
+    data: SearchParameterData,
+    popUpTo: String
+) {
+    val json = Uri.encode(Gson().toJson(data))
+
+    navigate(SearchNavigation.Template.route.replace("{data}", json.toString())) {
+        popUpTo(popUpTo)
+    }
+}
+
+data class SearchParameterData(
+    val targetId: Long? = null,
+    val themeId: Long? = null,
+    val keyword: String? = null,
+) : Serializable

@@ -16,7 +16,8 @@ import com.nuguollim.data.state.ResultState
 @Composable
 fun TargetChoiceScreen(
     navController: NavHostController,
-    viewModel: TargetSearchViewModel = hiltViewModel()
+    viewModel: TargetSearchViewModel = hiltViewModel(),
+    onTargetId: (Int?) -> Unit
 ) {
     val templateTargetListState by viewModel.templateTargetListState.collectAsStateWithLifecycle()
 
@@ -28,6 +29,9 @@ fun TargetChoiceScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 10.dp)
-        ) { navController.navigateToTheme(it) }
+        ) { targetData ->
+            onTargetId.invoke(targetData.id)
+            navController.navigateToTheme(targetData)
+        }
     }
 }
