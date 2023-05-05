@@ -15,8 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nugu.nuguollim.design_system.theme.Gray400
-import com.nugu.nuguollim.design_system.theme.Gray600
+import com.nugu.nuguollim.design_system.theme.Primary500
 import com.nugu.nuguollim.design_system.theme.pretendard
 
 @Composable
@@ -64,18 +63,18 @@ fun NuguStrokeButton(
             .border(
                 width = 1.dp,
                 shape = RoundedCornerShape(5.dp),
-                color = Gray400
+                color = Primary500
             )
             .clickable { onClick() }
             .padding(horizontal = 20.dp, vertical = 10.dp),
     ) {
         Text(
-            modifier = Modifier,
+            modifier = Modifier.align(Alignment.Center),
             text = text,
             fontFamily = pretendard,
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
-            color = Gray600,
+            color = Primary500,
             textAlign = TextAlign.Center
         )
     }

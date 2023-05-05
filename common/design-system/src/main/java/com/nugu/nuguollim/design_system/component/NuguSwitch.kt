@@ -2,6 +2,7 @@ package com.nugu.nuguollim.design_system.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -26,39 +27,32 @@ fun NuguSwitch(
     text2: String,
     onChecked: (Boolean) -> Unit = {}
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     var checked by remember { mutableStateOf(true) }
 
     Card(
         shape = RoundedCornerShape(500.dp),
         modifier = modifier
-            .width(180.dp)
-            .height(34.dp)
-            .clickable {
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
                 checked = checked.not()
                 onChecked(checked)
             },
         elevation = 0.dp,
     ) {
-        Box(
+        Row(
             modifier = Modifier.background(Gray100),
+            horizontalArrangement = Arrangement.Center
         ) {
-            val checkedText = if (checked) text1 else text2
-            val thumbAlign = if (checked) Alignment.TopStart else Alignment.TopEnd
-
             NuguSwitchThumb(
-                modifier = Modifier.align(Alignment.TopStart),
-                checked = false,
+                checked = checked,
                 text = text1
             )
             NuguSwitchThumb(
-                modifier = Modifier.align(Alignment.TopEnd),
-                checked = false,
+                checked = checked.not(),
                 text = text2
-            )
-            NuguSwitchThumb(
-                modifier = Modifier.align(thumbAlign),
-                checked = true,
-                text = checkedText
             )
         }
     }
