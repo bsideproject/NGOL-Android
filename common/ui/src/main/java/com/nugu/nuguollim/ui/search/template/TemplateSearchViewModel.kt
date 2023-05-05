@@ -1,4 +1,4 @@
-package com.nugu.nuguollim.ui.search.theme
+package com.nugu.nuguollim.ui.search.template
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.nugu.nuguollim.common.data.model.search.target.TemplateTargetData
 import com.nugu.nuguollim.di.IoDispatcher
 import com.nugu.paging.template.TemplatePagingSource
+import com.nugu.search.nav.SearchParameterData
 import com.nuguollim.data.state.resultStateFlow
 import com.nuguollim.data.usecase.template.AddFavoriteUseCase
 import com.nuguollim.data.usecase.template.GetTemplatesUseCase
@@ -27,8 +27,8 @@ import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 @HiltViewModel
-class ThemeSearchViewModel @Inject constructor(
-    stateSavedStateHandle: SavedStateHandle,
+class TemplateSearchViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val templatePagingSourceFactory: TemplatePagingSource.Factory,
     private val getTemplatesUseCase: GetTemplatesUseCase,
     private val addFavoriteUseCase: AddFavoriteUseCase,
@@ -36,11 +36,15 @@ class ThemeSearchViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val targetArgs = TargetArgs(stateSavedStateHandle)
-    val targetData: TemplateTargetData get() = targetArgs.targetData
+    private val searchArgs get() = SearchArgs(savedStateHandle)
+
+    private val searchParamsData get() = searchArgs.data
+    val keyword get() = searchParamsData?.keyword ?: ""
 
     private val defaultParams get() = GetTemplatesUseCase.Params(
-        targetId = targetData.id.toLong(),
+        targetId = searchParamsData?.targetId,
+        themeId = searchParamsData?.themeId,
+        keyword = searchParamsData?.keyword,
         sort = "viewCount,desc"
     )
 
@@ -68,10 +72,6 @@ class ThemeSearchViewModel @Inject constructor(
         _templatesParams.update { it.copy(sort = sort) }
     }
 
-    fun updateTheme(themeId: Int?) {
-        _templatesParams.update { it.copy(themeId = themeId?.toLong()) }
-    }
-
     fun addFavorite(id: Long) {
         viewModelScope.launch { addFavoriteUseCase.run(id) }
     }
@@ -82,6 +82,6 @@ class ThemeSearchViewModel @Inject constructor(
 
 }
 
-private class TargetArgs(stateSavedStateHandle: SavedStateHandle) {
-    val targetData = stateSavedStateHandle.get<TemplateTargetData>("data")!!
+private class SearchArgs(stateSavedStateHandle: SavedStateHandle) {
+    val data = stateSavedStateHandle.get<SearchParameterData>("data")
 }

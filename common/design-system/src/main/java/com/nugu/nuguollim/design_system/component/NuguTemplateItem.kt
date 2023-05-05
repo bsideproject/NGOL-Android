@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -73,6 +74,83 @@ fun NuguTemplateItem(
                     ),
                     border = BorderStroke(1.dp, Black)
                 )
+                NuguFavorite(isFavorite = isFavorite, onClick = onClickFavorite)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = content,
+                fontFamily = pretendard,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = Black
+            )
+        }
+    }
+}
+
+
+@Composable
+fun NuguTemplateItem(
+    modifier: Modifier = Modifier,
+    target: AnnotatedString,
+    label: AnnotatedString,
+    content: AnnotatedString,
+    isFavorite: Boolean = false,
+    onClick: () -> Unit = {},
+    onClickFavorite: () -> Unit = {}
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(10.dp),
+        border = BorderStroke(width = 1.dp, color = Color(0xFFD0D0D0))
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(start = 10.dp, end = 10.dp, top = 12.dp, bottom = 16.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Chip(
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = target,
+                            fontFamily = pretendard,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            color = Black
+                        )
+                    },
+                    colors = ChipDefaults.outlinedChipColors(
+                        backgroundColor = Color.White,
+                        contentColor = Black
+                    ),
+                    border = BorderStroke(1.dp, Black)
+                )
+                Spacer(modifier = Modifier.padding(start = 4.dp))
+                Chip(
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = label,
+                            fontFamily = pretendard,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            color = Black
+                        )
+                    },
+                    colors = ChipDefaults.outlinedChipColors(
+                        backgroundColor = Color.White,
+                        contentColor = Black
+                    ),
+                    border = BorderStroke(1.dp, Black)
+                )
+                Spacer(modifier = Modifier.weight(1f))
                 NuguFavorite(isFavorite = isFavorite, onClick = onClickFavorite)
             }
             Spacer(modifier = Modifier.height(8.dp))

@@ -1,6 +1,8 @@
 package com.nugu.nuguollim.design_system.component
 
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
@@ -25,7 +27,9 @@ fun NuguTextField(
         fontWeight = FontWeight.Normal
     ),
     placeHolderStyle: PlaceHolderStyle,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     BasicTextField(
         value = value,
@@ -33,7 +37,9 @@ fun NuguTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         textStyle = textStyle,
-        modifier = modifier
+        modifier = modifier,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
     )
 
     if (value.isEmpty()) {

@@ -21,7 +21,7 @@ internal class BodyCallAdapter<T>(
     override fun adapt(call: Call<T>): Flow<T> = flow {
         emit(
             suspendCancellableCoroutine { cancellableContinuation ->
-                call.enqueue(
+                call.clone().enqueue(
                     object : Callback<T> {
                         override fun onResponse(call: Call<T>, response: Response<T>) {
                             cancellableContinuation.resume(response.body()!!) {

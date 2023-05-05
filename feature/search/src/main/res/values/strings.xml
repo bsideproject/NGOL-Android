@@ -3,4 +3,12 @@
     <!-- Search -->
     <string name="description_search_theme_title">%1$s에게 올릴 편지를 골라볼까요?</string>
     <string name="description_search_theme_tip">구체적인 상황을 선택하면 쉽게 찾을 수 있어요!</string>
+    <string name="description_search_template_title">\&apos;%1$s\&apos; 검색 결과</string>
+    <string name="description_search_template_tip">템플릿을 선택하면 바로 메시지를 작성할 수 있어요!</string>
+    <string name="description_search_template_empty_title">\&apos;%1$s\&apos; 에 대한\n검색 결과가 없습니다.</string>
+    <string name="description_search_template_empty_tip">원하시는 템플릿을 발견하고 저장해보세요!</string>
+    <string name="description_search_template_empty_button_text">둘러보기</string>
+    <string name="description_search_template_empty_tip_title">이렇게 해보세요.</string>
+    <string name="description_search_template_empty_tip_sub1">・검색어를 바르게 입력했는지 확인해 보세요.</string>
+    <string name="description_search_template_empty_tip_sub2">・간단한 단어로 검색해보세요. (예 : 대머리 교수님 → 교수님)</string>
 </resources>
