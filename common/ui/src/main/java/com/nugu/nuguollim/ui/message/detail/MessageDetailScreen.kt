@@ -2,7 +2,7 @@ package com.nugu.nuguollim.ui.message.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +19,8 @@ fun MessageDetailScreen(
     onClickTextShare: (Template) -> Unit = {},
     onClickTemplateEdit: (Template) -> Unit = {}
 ) {
+    var openDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -43,6 +45,7 @@ fun MessageDetailScreen(
         Row {
             NuguStrokeButton(modifier = Modifier.weight(1f), text = "텍스트 복사") {
                 onClickTextCopy(template)
+                openDialog = true
             }
             Spacer(modifier = Modifier.width(6.dp))
             NuguStrokeButton(modifier = Modifier.weight(1f), text = "텍스트 공유") {
@@ -52,6 +55,10 @@ fun MessageDetailScreen(
 
         Spacer(modifier = Modifier.height(67.dp))
         NuguFillButton(text = "편지지에 쓰기") { onClickTemplateEdit(template) }
+    }
+
+    if (openDialog) {
+        NuguMessageCopyDialog { openDialog = false }
     }
 }
 
