@@ -1,33 +1,32 @@
 package com.nugu.nuguollim.ui.message.edit
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.nugu.search.nav.navigateToTheme
-import com.nugu.search.ui.TargetSearchScreen
-import com.nuguollim.data.state.ResultState
+import com.google.gson.Gson
+import com.mohamedrejeb.richeditor.model.RichTextValue
+import com.nugu.nuguollim.common.data.model.template.Template
 
 @Composable
 fun MessageEditRoute(
     navController: NavHostController,
-    viewModel: MessageEditViewModel = hiltViewModel()
+    viewModel: MessageEditViewModel = hiltViewModel(),
+    template: Template,
+    onClickTextCopy: (String) -> Unit = {},
+    onClickTextShare: (String) -> Unit = {},
 ) {
-    val templateTargetListState by viewModel.templateTargetListState.collectAsStateWithLifecycle()
+    val activity = LocalContext.current as ComponentActivity
+    val richTextValue = Gson().fromJson(template.content, RichTextValue::class.java)
+        ?: RichTextValue()
 
-    when (templateTargetListState) {
-        is ResultState.Error -> templateTargetListState.errorData?.printStackTrace()
-        is ResultState.Loading -> Unit
-        is ResultState.Success -> TargetSearchScreen(
-            templateTargets = templateTargetListState.successData,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 10.dp)
-        ) { navController.navigateToTheme(it) }
-    }
+    MessageEditScreen(
+        richTextValue = richTextValue,
+        target = template.target,
+        theme = template.theme,
+        onClickTextCopy = onClickTextCopy,
+        onClickTextShare = onClickTextShare,
+        onClose = { activity.finish() }
+    )
 }

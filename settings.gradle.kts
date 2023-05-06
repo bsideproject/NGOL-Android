@@ -6,6 +6,7 @@ pluginManagement {
         mavenCentral()
         maven("https://devrepo.kakao.com/nexus/content/groups/public/")
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven ( "https://jitpack.io")
     }
 }
 dependencyResolutionManagement {
@@ -15,6 +16,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://devrepo.kakao.com/nexus/content/groups/public/")
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven ( "https://jitpack.io")
     }
 }
 rootProject.name = "nuguollim"
