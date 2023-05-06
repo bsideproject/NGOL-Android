@@ -14,6 +14,8 @@ fun MessageNavHost(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     template: Template,
+    onClickTextCopy: (String) -> Unit = {},
+    onClickTextShare: (String) -> Unit = {},
 ) {
     NavHost(
         modifier = modifier,
@@ -21,7 +23,13 @@ fun MessageNavHost(
         startDestination = MessageScreenType.Detail.screenRoute
     ) {
         composable(MessageScreenType.Detail.screenRoute) {
-            MessageDetailRoute(navHostController, template = template)
+            MessageDetailRoute(
+                navHostController,
+                template = template,
+                onClickTextCopy = { onClickTextCopy(it.content) },
+                onClickTextShare = { onClickTextShare(it.content) },
+                onClickTemplateEdit = { navHostController.navigate(MessageScreenType.Edit.screenRoute) }
+            )
         }
         composable(MessageScreenType.Edit.screenRoute) {
             MessageEditRoute(navHostController)

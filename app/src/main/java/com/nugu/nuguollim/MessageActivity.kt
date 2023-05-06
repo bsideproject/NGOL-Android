@@ -1,5 +1,9 @@
 package com.nugu.nuguollim
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -40,10 +44,28 @@ class MessageActivity : ComponentActivity() {
                 MessageNavHost(
                     modifier = Modifier.padding(innerPadding),
                     navHostController = navController,
-                    template = getTemplate()
+                    template = getTemplate(),
+                    onClickTextCopy = { setClipboardText(it) },
+                    onClickTextShare = { shareText(it) }
                 )
             }
         }
+    }
+
+    private fun setClipboardText(text: String) {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("nugu message content", text)
+        clipboard.setPrimaryClip(clip)
+    }
+
+    private fun shareText(text: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, text)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(intent, null)
+        startActivity(shareIntent)
     }
 
     private fun getTemplate(): Template {

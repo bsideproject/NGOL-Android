@@ -9,12 +9,15 @@ import com.nugu.nuguollim.common.data.model.template.Template
 fun MessageDetailRoute(
     navController: NavHostController,
     viewModel: MessageDetailViewModel = hiltViewModel(),
-    template: Template
+    template: Template,
+    onClickTextCopy: (Template) -> Unit = {},
+    onClickTextShare: (Template) -> Unit = {},
+    onClickTemplateEdit: (Template) -> Unit = {}
 ) {
-        MessageDetailScreen(
-            template = template,
-            onClickTextCopy = {},
-            onClickTextShare = {},
-            onClickTemplateEdit = {}
-        )
+    MessageDetailScreen(
+        template = template,
+        onClickTextCopy = onClickTextCopy,
+        onClickTextShare = onClickTextShare,
+        onClickTemplateEdit = onClickTemplateEdit
+    )
 }
