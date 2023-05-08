@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import androidx.paging.PagingData
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.design_system.component.NuguLoadingProgressDialog
@@ -14,9 +13,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ThemeSearchRoute(
-    navController: NavHostController,
     viewModel: ThemeSearchViewModel = hiltViewModel(),
-    onThemeId: (Int?) -> Unit
+    onThemeId: (Int?) -> Unit,
+    onClickTemplate: (Template) -> Unit = {}
 ) {
     val templates by viewModel.templatesParams.collectAsStateWithLifecycle(null)
 
@@ -37,7 +36,8 @@ fun ThemeSearchRoute(
                 } else {
                     viewModel.removeFavorite(id)
                 }
-            }
+            },
+            onClickTemplate = onClickTemplate
         )
         null -> Unit
     }

@@ -29,7 +29,9 @@ fun HomeNavHost(
         composable(NuguBottomNavItem.Home.screenRoute) {
             HomeRoute(navController) { onClickTemplate(it) }
         }
-        composable(NuguBottomNavItem.TemplateSearch.screenRoute) { SearchRoute(navController) }
+        composable(NuguBottomNavItem.TemplateSearch.screenRoute) {
+            SearchRoute(navController) { onClickTemplate(it) }
+        }
         composable(NuguBottomNavItem.Community.screenRoute) {}
     }
 }
