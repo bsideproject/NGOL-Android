@@ -45,6 +45,7 @@ fun ThemeSearchScreen(
     onSortChanged: (TemplateSort) -> Unit,
     onThemeSelectChanged: (Int?) -> Unit,
     onFavorite: (Long, Boolean) -> Unit,
+    onClickTemplate: (Template) -> Unit = {}
 ) {
     val templates = templatesData.collectAsLazyPagingItems()
     var isCheckThemeId by remember { mutableStateOf<Int?>(null) }
@@ -105,7 +106,8 @@ fun ThemeSearchScreen(
                         onClickFavorite = {
                             isFavorite = !isFavorite
                             onFavorite.invoke(contentData.id, isFavorite)
-                        }
+                        },
+                        onClick = { onClickTemplate.invoke(contentData) }
                     )
                     Spacer(Modifier.padding(6.dp))
                 }

@@ -82,9 +82,12 @@ fun NavGraphBuilder.templateScreen(
 }
 
 fun NavController.navigateToTarget() {
+    popBackStack(
+        route = SearchNavigation.Target.route,
+        inclusive = true
+    )
     navigate(SearchNavigation.Target.route) {
         launchSingleTop = true
-        popUpTo(NAVIGATION_ROUTE_TEMPLATE)
     }
 }
 
