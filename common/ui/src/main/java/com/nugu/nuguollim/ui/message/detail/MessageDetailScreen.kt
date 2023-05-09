@@ -29,7 +29,7 @@ fun MessageDetailScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        NuguMessageToolbar(
+        NuguMessageTextToolbar(
             onClickBack = onClose,
             onClickClose = onClose
         )

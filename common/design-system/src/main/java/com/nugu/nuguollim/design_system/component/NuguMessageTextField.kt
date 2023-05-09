@@ -2,7 +2,6 @@ package com.nugu.nuguollim.design_system.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
@@ -15,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.mohamedrejeb.richeditor.ui.material.RichTextEditor
-import com.nugu.nuguollim.design_system.theme.Gray100
 import com.nugu.nuguollim.design_system.theme.Gray500
 import com.nugu.nuguollim.design_system.theme.pretendard
 
@@ -25,16 +23,14 @@ fun NuguMessageTextField(
     modifier: Modifier = Modifier,
     richText: RichTextValue,
     enable: Boolean = true,
+    showTextLimit: Boolean = true,
     onTextChange: (RichTextValue) -> Unit = {},
 ) {
     val currentTextLength = richText.textFieldValue.text.length
     val maxTextLength = 400
 
     Box(
-        modifier = modifier.background(
-            color = Gray100,
-            shape = RoundedCornerShape(10.dp)
-        )
+        modifier = modifier
     ) {
         RichTextEditor(
             modifier = Modifier
@@ -53,16 +49,18 @@ fun NuguMessageTextField(
             ),
             enabled = enable,
         )
-        Text(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 20.dp, end = 16.dp),
-            text = "${currentTextLength}/${maxTextLength}",
-            fontFamily = pretendard,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            color = Gray500
-        )
+        if (showTextLimit) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 20.dp, end = 16.dp),
+                text = "${currentTextLength}/${maxTextLength}",
+                fontFamily = pretendard,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = Gray500
+            )
+        }
     }
 }
 

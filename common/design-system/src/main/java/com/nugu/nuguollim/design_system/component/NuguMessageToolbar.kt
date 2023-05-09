@@ -19,6 +19,28 @@ import com.nugu.nuguollim.design_system.theme.Gray600
 
 @Composable
 fun NuguMessageToolbar(
+    textEditMode: Boolean = false,
+    onClickBack: () -> Unit = {},
+    onClickClose: () -> Unit = {},
+    onClickShareImage: () -> Unit = {},
+    onClickSave: () -> Unit = {}
+) {
+    if (textEditMode) {
+        NuguMessageTextToolbar(
+            onClickBack = onClickBack,
+            onClickClose = onClickClose
+        )
+    } else {
+        NuguMessageEditToolbar(
+            onClickBack = onClickBack,
+            onClickShareImage = onClickShareImage,
+            onClickSave = onClickSave
+        )
+    }
+}
+
+@Composable
+fun NuguMessageTextToolbar(
     onClickBack: () -> Unit = {},
     onClickClose: () -> Unit = {}
 ) {
@@ -106,7 +128,7 @@ fun NuguMessageEditToolbar(
 private fun TopButton(
     text: String,
     onClick: () -> Unit
-){
+) {
     Chip(
         modifier = Modifier,
         onClick = onClick,
@@ -135,7 +157,7 @@ private fun NuguMessageToolbarPreview() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NuguMessageToolbar()
+        NuguMessageTextToolbar()
     }
 }
 

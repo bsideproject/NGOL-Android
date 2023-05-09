@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.mohamedrejeb.richeditor.model.RichTextStyle
 import com.mohamedrejeb.richeditor.model.RichTextValue
+import com.nugu.nuguollim.common.data.model.paper.Paper
 import com.nugu.nuguollim.design_system.component.*
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.nuguollim.ui.DevicePreviews
@@ -19,6 +20,7 @@ fun MessageEditScreen(
     richTextValue: RichTextValue,
     target: String,
     theme: String,
+    papers: List<Paper>,
     onClickTextCopy: (String) -> Unit = {},
     onClickTextShare: (String) -> Unit = {},
     onClickImageShare: () -> Unit = {},
@@ -28,16 +30,21 @@ fun MessageEditScreen(
     var openCopyDialog by remember { mutableStateOf(false) }
     var openColorDialog by remember { mutableStateOf(false) }
     var textValue by remember { mutableStateOf(richTextValue) }
+    var textEditMode by remember { mutableStateOf(true) }
+    var imgColor by remember { mutableStateOf<Color?>(null) }
+    var imgBackground by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        NuguMessageEditToolbar(
+        NuguMessageToolbar(
+            textEditMode = textEditMode,
             onClickBack = onClose,
+            onClickClose = onClose,
             onClickShareImage = { onClickImageShare() },
-            onClickSave = { onClickSave() },
+            onClickSave = { onClickSave() }
         )
         Column(
             modifier = modifier
@@ -54,28 +61,38 @@ fun MessageEditScreen(
                 textTheme = theme,
             )
             Spacer(modifier = Modifier.height(12.dp))
-            NuguSwitch(text1 = "텍스트 추가", text2 = "이미지 편집") {}
+            NuguSwitch(text1 = "텍스트 추가", text2 = "이미지 편집") { textEditMode = it }
 
             Spacer(modifier = Modifier.height(16.dp))
-            NuguMessageTextField(modifier = Modifier.weight(0.4f), richText = textValue) {
-                textValue = it
-            }
+            NuguMessage(
+                modifier = Modifier.weight(0.4f).aspectRatio(1f),
+                textValue = textValue,
+                textEditMode = textEditMode,
+                onTextChange = { textValue = it },
+                imgColor = imgColor,
+                imgBackground = imgBackground,
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
-            Row {
-                NuguStrokeButton(modifier = Modifier.weight(1f), text = "텍스트 복사") {
-                    onClickTextCopy(richTextValue.textFieldValue.text)
+            NuguMessageBottomMenu(
+                textEditMode = textEditMode,
+                text = textValue,
+                papers = papers,
+                onTextChanged = { textValue = it },
+                onClickTextCopy = {
+                    onClickTextCopy(textValue.textFieldValue.text)
                     openCopyDialog = true
+                },
+                onClickTextShare = { onClickTextShare(textValue.textFieldValue.text) },
+                onClickColor = { openColorDialog = true },
+                onClickImgColor = {
+                    imgColor = it
+                    imgBackground = null
+                },
+                onClickImgBackground = {
+                    imgBackground = it
+                    imgColor = null
                 }
-                Spacer(modifier = Modifier.width(6.dp))
-                NuguStrokeButton(modifier = Modifier.weight(1f), text = "텍스트 공유") {
-                    onClickTextShare(richTextValue.textFieldValue.text)
-                }
-            }
-            RichTextStyleRow(
-                value = textValue,
-                onValueChanged = { textValue = it },
-                onClickColor = { openColorDialog = true }
             )
         }
     }
@@ -83,13 +100,66 @@ fun MessageEditScreen(
         NuguMessageCopyDialog { openCopyDialog = false }
     }
     if (openColorDialog) {
-        HsvColorPickerDialog{
+        HsvColorPickerDialog {
             val colorStyle = RichTextStyle.TextColor(it)
             textValue = textValue.toggleStyle(colorStyle)
             openColorDialog = false
         }
     }
 
+}
+
+@Composable
+private fun NuguMessageTextMenu(
+    onClickTextCopy: () -> Unit = {},
+    onClickTextShare: () -> Unit = {},
+) {
+    Row {
+        NuguStrokeButton(modifier = Modifier.weight(1f), text = "텍스트 복사") {
+            onClickTextCopy()
+        }
+        Spacer(modifier = Modifier.width(6.dp))
+        NuguStrokeButton(modifier = Modifier.weight(1f), text = "텍스트 공유") {
+            onClickTextShare()
+        }
+    }
+}
+
+@Composable
+private fun NuguMessageBottomMenu(
+    modifier: Modifier = Modifier,
+    textEditMode: Boolean,
+    text: RichTextValue,
+    papers: List<Paper>,
+    onTextChanged: (RichTextValue) -> Unit,
+    onClickTextCopy: () -> Unit = {},
+    onClickTextShare: () -> Unit = {},
+    onClickColor: () -> Unit = {},
+    onClickImgColor: (Color) -> Unit = {},
+    onClickImgBackground: (String) -> Unit = {}
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (textEditMode) {
+            NuguMessageTextMenu(
+                onClickTextCopy = onClickTextCopy,
+                onClickTextShare = onClickTextShare
+            )
+            RichTextStyleRow(
+                value = text,
+                onValueChanged = onTextChanged,
+                onClickColor = onClickColor
+            )
+        } else {
+            NuguImageSelectMenu(
+                papers = papers,
+                onSelectColor = onClickImgColor,
+                onSelectBackground = onClickImgBackground
+            )
+        }
+    }
 }
 
 @DevicePreviews
@@ -103,7 +173,12 @@ private fun MessageEditScreenPreview() {
         ) {
             val textValue by remember { mutableStateOf(RichTextValue()) }
 
-            MessageEditScreen(richTextValue = textValue, target = "교수님", theme = "성적문의")
+            MessageEditScreen(
+                richTextValue = textValue,
+                target = "교수님",
+                theme = "성적문의",
+                papers = emptyList()
+            )
         }
     }
 }

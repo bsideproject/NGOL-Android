@@ -1,8 +1,9 @@
 package com.nugu.nuguollim.di
 
 import com.nuguollim.remote.service.auth.AuthService
-import com.nuguollim.remote.service.template.TemplateService
+import com.nuguollim.remote.service.paper.PaperService
 import com.nuguollim.remote.service.search.SearchService
+import com.nuguollim.remote.service.template.TemplateService
 import com.nuguollim.remote.service.terms.TermsService
 import com.nuguollim.remote.util.RemoteServiceFactory
 import dagger.Module
@@ -42,5 +43,11 @@ class RemoteServiceModule {
         remoteServiceFactory: RemoteServiceFactory,
         @Named("baseUrl") baseUrl: String
     ): SearchService = remoteServiceFactory.createService(SearchService::class.java, baseUrl)
+
+    @Provides
+    fun providesPaperService(
+        remoteServiceFactory: RemoteServiceFactory,
+        @Named("baseUrl") baseUrl: String
+    ): PaperService = remoteServiceFactory.createService(PaperService::class.java, baseUrl)
 
 }
