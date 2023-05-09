@@ -26,13 +26,18 @@ fun MessageNavHost(
             MessageDetailRoute(
                 navHostController,
                 template = template,
-                onClickTextCopy = { onClickTextCopy(it.content) },
-                onClickTextShare = { onClickTextShare(it.content) },
+                onClickTextCopy = { onClickTextCopy(it) },
+                onClickTextShare = { onClickTextShare(it) },
                 onClickTemplateEdit = { navHostController.navigate(MessageScreenType.Edit.screenRoute) }
             )
         }
         composable(MessageScreenType.Edit.screenRoute) {
-            MessageEditRoute(navHostController)
+            MessageEditRoute(
+                navHostController,
+                template = template,
+                onClickTextCopy = { onClickTextCopy(it) },
+                onClickTextShare = { onClickTextShare(it) },
+            )
         }
     }
 }

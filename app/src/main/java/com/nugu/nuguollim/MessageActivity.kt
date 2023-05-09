@@ -13,9 +13,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.nugu.nuguollim.common.data.model.template.Template
-import com.nugu.nuguollim.design_system.component.NuguMessageToolbar
 import com.nugu.nuguollim.navigation.MessageNavHost
-import com.nugu.nuguollim.navigation.MessageScreenType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,20 +24,6 @@ class MessageActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             Scaffold(
-                topBar = {
-                    NuguMessageToolbar(
-                        onClickBack = {
-                            val currentRoute =
-                                navController.currentBackStackEntry?.destination?.route
-                            if (currentRoute == MessageScreenType.Detail.screenRoute) {
-                                finish()
-                            } else {
-                                navController.popBackStack()
-                            }
-                        },
-                        onClickClose = { finish() }
-                    )
-                }
             ) { innerPadding ->
                 MessageNavHost(
                     modifier = Modifier.padding(innerPadding),
