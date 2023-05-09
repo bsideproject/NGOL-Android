@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.navigation.HomeNavHost
-import com.nugu.nuguollim.ui.theme.NuguollimTheme
+import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
