@@ -2,6 +2,8 @@ package com.nugu.nuguollim.di
 
 import com.nugu.data_store.data_source.auth.AuthLocalDataSource
 import com.nugu.data_store.data_source.auth.AuthLocalDataSourceImpl
+import com.nugu.data_store.data_source.splash.SplashLocalDataSource
+import com.nugu.data_store.data_source.splash.SplashLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +15,8 @@ interface DataLocalSourceModule {
 
     @Binds
     fun bindsAuthRemoteDataSource(authLocalDataSource: AuthLocalDataSourceImpl): AuthLocalDataSource
+
+    @Binds
+    fun bindsSplashLocalDataSource(splashLocalDataSource: SplashLocalDataSourceImpl): SplashLocalDataSource
 
 }

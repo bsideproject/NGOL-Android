@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.common.data)
     implementation(projects.feature.socialLogin)
     implementation(projects.feature.search)
+    implementation(projects.feature.onboard)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.lifecycle.runtime)

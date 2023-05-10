@@ -7,7 +7,7 @@ interface AuthLocalDataSource {
 
     fun getAuthInfo(): Flow<LocalAuthInfo>
 
-    suspend fun setAuthInfo(provideType: String, provideId: String, )
+    suspend fun setAuthInfo(provideType: String, provideId: String)
 
     fun getProvideToken(): Flow<String?>
 
