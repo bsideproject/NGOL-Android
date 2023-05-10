@@ -26,6 +26,7 @@ dependencies {
 
     implementation(projects.feature.socialLogin)
     implementation(projects.feature.search)
+    implementation(projects.feature.onboard)
     implementation(projects.core.data)
     implementation(projects.core.paging)
     implementation(projects.common.designSystem)

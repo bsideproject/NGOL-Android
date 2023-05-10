@@ -15,6 +15,7 @@ androidxComposeHiltNavigation = "1.0.0"
 androidxPaging = "3.1.1"
 androidxPagingCompose = "1.0.0-alpha14"
 androidxAppCompat = "1.6.1"
+accompanistPager = "0.30.1"
 systemUiController = "0.28.0"
 flowLayout = "0.31.0-alpha"
 dataStore = "1.0.0"
@@ -92,6 +93,8 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidxCompose" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidxCompose" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidxCompose" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
 
 google-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "googleServiceAuth" }
 naver-login = { module = "com.navercorp.nid:oauth-jdk8", version.ref = "naverLogin" }
