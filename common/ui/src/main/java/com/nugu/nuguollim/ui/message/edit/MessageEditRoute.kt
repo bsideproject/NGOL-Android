@@ -1,9 +1,11 @@
 package com.nugu.nuguollim.ui.message.edit
 
+import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -21,8 +23,8 @@ fun MessageEditRoute(
     template: Template,
     onClickTextCopy: (String) -> Unit = {},
     onClickTextShare: (String) -> Unit = {},
-    onClickImageSave: () -> Unit = {},
-    onClickImageShare: () -> Unit = {},
+    onClickImageSave: (ImageBitmap) -> Unit = {},
+    onClickImageShare: (ImageBitmap) -> Unit = {},
 ) {
     val activity = LocalContext.current as ComponentActivity
     val richTextValue = try {
@@ -51,7 +53,7 @@ fun MessageEditRoute(
         onClickTextCopy = onClickTextCopy,
         onClickTextShare = onClickTextShare,
         onClose = { activity.finish() },
-        onClickImageShare = onClickImageSave,
-        onClickSave = onClickImageShare
+        onClickImageShare = onClickImageShare,
+        onClickImageSave = onClickImageSave
     )
 }

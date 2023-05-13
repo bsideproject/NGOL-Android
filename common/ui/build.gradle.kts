@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     implementation(libs.gson)
     implementation(libs.rich.editor)
+    implementation(libs.capturable)
 
     implementation(projects.feature.socialLogin)
     implementation(projects.feature.search)

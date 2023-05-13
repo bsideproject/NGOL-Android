@@ -1,18 +1,37 @@
 package com.nugu.nuguollim.ui.message.edit
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.util.Log
+import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.drawToBitmap
 import com.mohamedrejeb.richeditor.model.RichTextStyle
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.nugu.nuguollim.common.data.model.paper.Paper
 import com.nugu.nuguollim.design_system.component.*
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.nuguollim.ui.DevicePreviews
+import com.nugu.ui_core.addFocusCleaner
+import dev.shreyaspatil.capturable.controller.rememberCaptureController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun MessageEditScreen(
@@ -23,9 +42,9 @@ fun MessageEditScreen(
     papers: List<Paper>,
     onClickTextCopy: (String) -> Unit = {},
     onClickTextShare: (String) -> Unit = {},
-    onClickImageShare: () -> Unit = {},
-    onClickSave: () -> Unit = {},
-    onClose: () -> Unit = {}
+    onClose: () -> Unit = {},
+    onClickImageShare: (ImageBitmap) -> Unit = {},
+    onClickImageSave: (ImageBitmap) -> Unit = {},
 ) {
     var openCopyDialog by remember { mutableStateOf(false) }
     var openColorDialog by remember { mutableStateOf(false) }
@@ -33,18 +52,28 @@ fun MessageEditScreen(
     var textEditMode by remember { mutableStateOf(true) }
     var imgColor by remember { mutableStateOf<Color?>(null) }
     var imgBackground by remember { mutableStateOf<String?>(null) }
+    val captureController = rememberCaptureController()
+    val focusManager = LocalFocusManager.current
+    var isClickSaveImage: Boolean = remember { false }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
+            .addFocusCleaner(focusManager = focusManager) {}
     ) {
         NuguMessageToolbar(
             textEditMode = textEditMode,
             onClickBack = onClose,
             onClickClose = onClose,
-            onClickShareImage = { onClickImageShare() },
-            onClickSave = { onClickSave() }
+            onClickShareImage = {
+                isClickSaveImage = false
+                captureController.capture()
+            },
+            onClickSave = {
+                isClickSaveImage = true
+                captureController.capture()
+            },
         )
         Column(
             modifier = modifier
@@ -65,12 +94,22 @@ fun MessageEditScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
             NuguMessage(
-                modifier = Modifier.weight(0.4f).aspectRatio(1f),
+                modifier = Modifier
+                    .weight(0.4f)
+                    .aspectRatio(1f),
                 textValue = textValue,
                 textEditMode = textEditMode,
-                onTextChange = { textValue = it },
                 imgColor = imgColor,
                 imgBackground = imgBackground,
+                captureController = captureController,
+                onTextChange = { textValue = it },
+                onCaptureBitmap = {
+                    if (isClickSaveImage) {
+                        onClickImageSave(it)
+                    } else {
+                        onClickImageShare(it)
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -96,6 +135,7 @@ fun MessageEditScreen(
             )
         }
     }
+
     if (openCopyDialog) {
         NuguMessageCopyDialog { openCopyDialog = false }
     }
@@ -106,7 +146,6 @@ fun MessageEditScreen(
             openColorDialog = false
         }
     }
-
 }
 
 @Composable

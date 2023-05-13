@@ -44,6 +44,8 @@ kakaoV2 = "2.8.2"
 richEditor = "0.1.0"
 colorPicker = "1.0.2"
 
+capturable = "1.0.3"
+
 [libraries]
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradle" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -102,6 +104,8 @@ kakao-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoV2" }
 
 rich-editor = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richEditor" }
 color-picker = {module = "com.github.skydoves:colorpicker-compose", version.ref = "colorPicker" }
+
+capturable = {module = "dev.shreyaspatil:capturable", version.ref = "capturable" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradle" }

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MessageActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,7 +32,13 @@ class MessageActivity : ComponentActivity() {
                     navHostController = navController,
                     template = getTemplate(),
                     onClickTextCopy = { setClipboardText(it) },
-                    onClickTextShare = { shareText(it) }
+                    onClickTextShare = { shareText(it) },
+                    onClickImageSave = {
+                        Log.d("save", "${it.width} ${it.height}")
+                    },
+                    onClickImageShare = {
+                        Log.d("share", "${it.width} ${it.height}")
+                    }
                 )
             }
         }

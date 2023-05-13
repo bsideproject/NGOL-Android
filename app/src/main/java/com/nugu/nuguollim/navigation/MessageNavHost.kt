@@ -1,7 +1,9 @@
 package com.nugu.nuguollim.navigation
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +18,8 @@ fun MessageNavHost(
     template: Template,
     onClickTextCopy: (String) -> Unit = {},
     onClickTextShare: (String) -> Unit = {},
+    onClickImageSave: (ImageBitmap) -> Unit = {},
+    onClickImageShare: (ImageBitmap) -> Unit = {},
 ) {
     NavHost(
         modifier = modifier,
@@ -37,6 +41,8 @@ fun MessageNavHost(
                 template = template,
                 onClickTextCopy = { onClickTextCopy(it) },
                 onClickTextShare = { onClickTextShare(it) },
+                onClickImageSave = { onClickImageSave(it) },
+                onClickImageShare = { onClickImageShare(it) },
             )
         }
     }

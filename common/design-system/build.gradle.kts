@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.rich.editor)
     implementation(libs.color.picker)
+    implementation(libs.capturable)
 
     implementation(projects.common.data)
 }
