@@ -47,7 +47,8 @@ fun TemplateSearchScreen(
     templatesData: Flow<PagingData<Template>>,
     onSortChanged: (TemplateSort) -> Unit,
     onFavorite: (Long, Boolean) -> Unit,
-    onNavigateToSearchHome: () -> Unit
+    onNavigateToSearchHome: () -> Unit,
+    onClickTemplate: (Template) -> Unit = {}
 ) {
     val templates = templatesData.collectAsLazyPagingItems()
 
@@ -108,7 +109,8 @@ fun TemplateSearchScreen(
                             onClickFavorite = {
                                 isFavorite = !isFavorite
                                 onFavorite.invoke(contentData.id, isFavorite)
-                            }
+                            },
+                            onClick = { onClickTemplate.invoke(contentData) }
                         )
                         Spacer(Modifier.padding(6.dp))
                     }

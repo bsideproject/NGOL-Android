@@ -19,6 +19,8 @@ dependencies {
     implementation(libs.lottie)
     implementation(libs.system.ui.controller)
     implementation(libs.androidx.compose.navigation)
+    implementation(libs.rich.editor)
+    implementation(libs.color.picker)
 
     implementation(projects.common.data)
 }

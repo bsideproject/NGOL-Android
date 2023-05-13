@@ -4,6 +4,8 @@ import com.nuguollim.data.repository.auth.AuthRepository
 import com.nuguollim.data.repository.auth.AuthRepositoryImpl
 import com.nuguollim.data.repository.seach.SearchRepository
 import com.nuguollim.data.repository.seach.SearchRepositoryImpl
+import com.nuguollim.data.repository.splash.SplashRepository
+import com.nuguollim.data.repository.splash.SplashRepositoryImpl
 import com.nuguollim.data.repository.template.TemplateRepository
 import com.nuguollim.data.repository.template.TemplateRepositoryImpl
 import dagger.Binds
@@ -23,5 +25,8 @@ interface RepositoryModule {
 
     @Binds
     fun bindsTemplateRepository(templateRepository: TemplateRepositoryImpl): TemplateRepository
+
+    @Binds
+    fun bindsSplashRepository(splashRepository: SplashRepositoryImpl): SplashRepository
 
 }

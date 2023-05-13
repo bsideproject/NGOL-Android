@@ -22,9 +22,11 @@ dependencies {
     testImplementation(libs.androidx.paging.common)
     implementation(libs.androidx.paging.compose)
     implementation(libs.gson)
+    implementation(libs.rich.editor)
 
     implementation(projects.feature.socialLogin)
     implementation(projects.feature.search)
+    implementation(projects.feature.onboard)
     implementation(projects.core.data)
     implementation(projects.core.paging)
     implementation(projects.common.designSystem)

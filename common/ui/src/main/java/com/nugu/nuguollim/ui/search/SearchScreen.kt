@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
 import com.nugu.nuguollim.design_system.component.NuguToolbar
 import com.nugu.nuguollim.design_system.component.NuguToolbarTitle
@@ -46,7 +47,8 @@ import com.nugu.ui_core.addFocusCleaner
 
 @Composable
 fun SearchRoute(
-    parentNavController: NavHostController
+    parentNavController: NavHostController,
+    onClickTemplate: (Template) -> Unit = {}
 ) {
     var targetId: Long? by rememberSaveable { mutableStateOf(null) }
     var themeId: Long? by rememberSaveable { mutableStateOf(null) }
@@ -95,11 +97,17 @@ fun SearchRoute(
                     searchNavigationState = SearchNavigation.Target
                 }
                 themeScreen {
-                    ThemeSearchRoute(childHostController) { themeId = it?.toLong() }
+                    ThemeSearchRoute(
+                        onThemeId = { themeId = it?.toLong() },
+                        onClickTemplate = onClickTemplate
+                    )
                     searchNavigationState = SearchNavigation.Theme
                 }
                 templateScreen {
-                    TemplateSearchRoute(childHostController)
+                    TemplateSearchRoute(
+                        navController = childHostController,
+                        onClickTemplate = onClickTemplate
+                    )
                     searchNavigationState = SearchNavigation.Template
                 }
             }

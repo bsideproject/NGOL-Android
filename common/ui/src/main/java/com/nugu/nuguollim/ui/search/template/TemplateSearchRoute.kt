@@ -16,7 +16,8 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun TemplateSearchRoute(
     navController: NavHostController,
-    viewModel: TemplateSearchViewModel = hiltViewModel()
+    viewModel: TemplateSearchViewModel = hiltViewModel(),
+    onClickTemplate: (Template) -> Unit = {}
 ) {
     val templates by viewModel.templatesParams.collectAsStateWithLifecycle(null)
 
@@ -35,7 +36,8 @@ fun TemplateSearchRoute(
                     viewModel.removeFavorite(id)
                 }
             },
-            onNavigateToSearchHome = { navController.navigateToTarget() }
+            onNavigateToSearchHome = { navController.navigateToTarget() },
+            onClickTemplate = onClickTemplate
         )
         null -> Unit
     }
