@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -167,14 +168,16 @@ private fun GuidePage(
         fontWeight = FontWeight.Medium,
         fontSize = 26.sp,
         style = MaterialTheme.typography.h1,
-        modifier = Modifier.padding(top = 53.dp)
+        modifier = Modifier.padding(top = 53.dp),
+        textAlign = TextAlign.Center
     )
     PretendardText(
         text = description,
         color = Gray700,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        modifier = Modifier.padding(top = 8.dp)
+        modifier = Modifier.padding(top = 8.dp),
+        textAlign = TextAlign.Center
     )
 }
 
