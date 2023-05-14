@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.compose.compiler)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.hilt.navigation)
+    implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.tooling.preview)
