@@ -1,26 +1,14 @@
 package com.nugu.nuguollim.ui.message.edit
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.util.Log
-import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.drawToBitmap
 import com.mohamedrejeb.richeditor.model.RichTextStyle
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.nugu.nuguollim.common.data.model.paper.Paper
@@ -29,9 +17,6 @@ import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.nuguollim.ui.DevicePreviews
 import com.nugu.ui_core.addFocusCleaner
 import dev.shreyaspatil.capturable.controller.rememberCaptureController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun MessageEditScreen(
@@ -54,7 +39,7 @@ fun MessageEditScreen(
     var imgBackground by remember { mutableStateOf<String?>(null) }
     val captureController = rememberCaptureController()
     val focusManager = LocalFocusManager.current
-    var isClickSaveImage: Boolean = remember { false }
+    var isClickSaveImage by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier

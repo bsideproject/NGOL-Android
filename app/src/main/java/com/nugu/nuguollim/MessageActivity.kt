@@ -1,16 +1,17 @@
 package com.nugu.nuguollim
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.R.attr.mimeType
+import android.content.*
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
@@ -24,6 +25,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+
 
 @AndroidEntryPoint
 class MessageActivity : ComponentActivity() {
@@ -41,9 +47,7 @@ class MessageActivity : ComponentActivity() {
                     template = getTemplate(),
                     onClickTextCopy = { setClipboardText(it) },
                     onClickTextShare = { shareText(it) },
-                    onClickImageSave = {
-                        Log.d("save", "${it.width} ${it.height}")
-                    },
+                    onClickImageSave = { saveImage(it) },
                     onClickImageShare = { shareImage(it) }
                 )
             }
@@ -113,5 +117,84 @@ class MessageActivity : ComponentActivity() {
     }
 
     private fun saveImage(bitmap: ImageBitmap) {
+        saveImageLocal(bitmap)
+    }
+
+    private fun saveImageLocal(imageBitmap: ImageBitmap) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            saveImageLocalAboveQ(imageBitmap)
+        } else {
+            saveImageLocalUnderQ(imageBitmap)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun saveImageLocalAboveQ(imageBitmap: ImageBitmap) {
+        val bitmap = imageBitmap.asAndroidBitmap()
+        val resolver = contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, getImageName())
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
+
+        val uri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        uri?.let {
+            val outputStream = resolver.openOutputStream(it)
+            outputStream?.let { os ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
+                os.close()
+            }
+        }
+    }
+
+    private fun saveImageLocalUnderQ(imageBitmap: ImageBitmap) {
+        val bitmap = imageBitmap.asAndroidBitmap()
+        val path =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath
+        val dir = File("$path/saved_images")
+        dir.mkdirs()
+
+        val fileName = getImageName()
+        val file = File(dir, fileName)
+
+        try {
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            // 이미지가 갤러리에 즉시 표시되도록 합니다.
+            MediaScannerConnection.scanFile(
+                this, arrayOf(file.toString()), null
+            ) { _, _ ->
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getImageName(): String {
+        return "image_${System.currentTimeMillis()}.jpg"
+    }
+
+    private fun saveImageRemote(bitmap: ImageBitmap) {
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "${getCurrentTimeString()}.png")
+            put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+        }
+        val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+    }
+
+    private fun getCurrentTimeString(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            current.format(formatter)
+        } else {
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            sdf.format(Date())
+        }
     }
 }
