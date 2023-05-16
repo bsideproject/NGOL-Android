@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.mohamedrejeb.richeditor.model.RichTextStyle
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.nugu.nuguollim.common.data.model.paper.Paper
+import com.nugu.nuguollim.common.data.model.template.Writing
 import com.nugu.nuguollim.design_system.component.*
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.nuguollim.ui.DevicePreviews
@@ -29,7 +30,7 @@ fun MessageEditScreen(
     onClickTextShare: (String) -> Unit = {},
     onClose: () -> Unit = {},
     onClickImageShare: (ImageBitmap) -> Unit = {},
-    onClickImageSave: (ImageBitmap) -> Unit = {},
+    onClickImageSave: (ImageBitmap, Writing) -> Unit = { _, _ -> },
 ) {
     var openCopyDialog by remember { mutableStateOf(false) }
     var openColorDialog by remember { mutableStateOf(false) }
@@ -90,7 +91,13 @@ fun MessageEditScreen(
                 onTextChange = { textValue = it },
                 onCaptureBitmap = {
                     if (isClickSaveImage) {
-                        onClickImageSave(it)
+                        val content = textValue.textFieldValue.text
+                        val writing = Writing(
+                            content = content,
+                            paper = imgBackground ?: "",
+                            templateId = 0
+                        )
+                        onClickImageSave(it, writing)
                     } else {
                         onClickImageShare(it)
                     }

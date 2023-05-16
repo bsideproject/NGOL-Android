@@ -1,6 +1,5 @@
 package com.nugu.nuguollim.ui.message.edit
 
-import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +14,7 @@ import com.mohamedrejeb.richeditor.model.RichTextPart
 import com.mohamedrejeb.richeditor.model.RichTextStyle
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.nugu.nuguollim.common.data.model.template.Template
+import com.nugu.nuguollim.common.data.model.template.Writing
 
 @Composable
 fun MessageEditRoute(
@@ -23,7 +23,7 @@ fun MessageEditRoute(
     template: Template,
     onClickTextCopy: (String) -> Unit = {},
     onClickTextShare: (String) -> Unit = {},
-    onClickImageSave: (ImageBitmap) -> Unit = {},
+    onClickImageSave: (ImageBitmap, Writing) -> Unit = { _, _ -> },
     onClickImageShare: (ImageBitmap) -> Unit = {},
 ) {
     val activity = LocalContext.current as ComponentActivity
@@ -54,6 +54,9 @@ fun MessageEditRoute(
         onClickTextShare = onClickTextShare,
         onClose = { activity.finish() },
         onClickImageShare = onClickImageShare,
-        onClickImageSave = onClickImageSave
+        onClickImageSave = { imageBitmap, writing ->
+            writing.templateId = template.id
+            onClickImageSave(imageBitmap, writing)
+        },
     )
 }

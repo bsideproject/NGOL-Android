@@ -3,10 +3,8 @@ package com.nuguollim.remote.service.template
 import com.nugu.config.AuthConfig
 import com.nuguollim.remote.model.template.AllTemplateResponse
 import com.nuguollim.remote.model.template.FavoriteResponse
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import com.nuguollim.remote.model.template.WritingResponse
+import retrofit2.http.*
 
 interface TemplateService {
 
@@ -33,5 +31,12 @@ interface TemplateService {
         @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
     ): FavoriteResponse
 
-
+    @PUT(value = "v1/templates/writing")
+    suspend fun saveTemplate(
+        @Query("id") id: Long?,
+        @Query(value = "content", encoded = true) content: String,
+        @Query(value = "paper", encoded = true) paper: String,
+        @Query("templateId") templateId: Long,
+        @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
+    ): WritingResponse
 }

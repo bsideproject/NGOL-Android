@@ -1,6 +1,5 @@
 package com.nugu.nuguollim
 
-import android.R.attr.mimeType
 import android.content.*
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
@@ -11,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -20,19 +20,19 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.core.content.FileProvider
 import androidx.navigation.compose.rememberNavController
 import com.nugu.nuguollim.common.data.model.template.Template
+import com.nugu.nuguollim.common.data.model.template.Writing
 import com.nugu.nuguollim.navigation.MessageNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
 @AndroidEntryPoint
 class MessageActivity : ComponentActivity() {
+
+    private val viewModel: MessageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class MessageActivity : ComponentActivity() {
                     template = getTemplate(),
                     onClickTextCopy = { setClipboardText(it) },
                     onClickTextShare = { shareText(it) },
-                    onClickImageSave = { saveImage(it) },
+                    onClickImageSave = { imageBitmap, writing -> saveImage(imageBitmap, writing) },
                     onClickImageShare = { shareImage(it) }
                 )
             }
@@ -116,8 +116,9 @@ class MessageActivity : ComponentActivity() {
         }
     }
 
-    private fun saveImage(bitmap: ImageBitmap) {
+    private fun saveImage(bitmap: ImageBitmap, writing: Writing) {
         saveImageLocal(bitmap)
+        saveImageRemote(writing)
     }
 
     private fun saveImageLocal(imageBitmap: ImageBitmap) {
@@ -179,22 +180,7 @@ class MessageActivity : ComponentActivity() {
         return "image_${System.currentTimeMillis()}.jpg"
     }
 
-    private fun saveImageRemote(bitmap: ImageBitmap) {
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "${getCurrentTimeString()}.png")
-            put(MediaStore.Images.Media.MIME_TYPE, mimeType)
-        }
-        val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-    }
-
-    private fun getCurrentTimeString(): String {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val current = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            current.format(formatter)
-        } else {
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            sdf.format(Date())
-        }
+    private fun saveImageRemote(writing: Writing) {
+        viewModel.saveTemplate(writing)
     }
 }
