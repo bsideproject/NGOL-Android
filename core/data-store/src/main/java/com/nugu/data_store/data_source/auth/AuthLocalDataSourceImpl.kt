@@ -32,6 +32,14 @@ class AuthLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun clearAuthInfo() {
+        dataStore.edit { settings ->
+            settings.remove(AUTH_PROVIDE_TYPE)
+            settings.remove(AUTH_PROVIDE_ID)
+            settings.remove(AUTH_PROVIDE_TOKEN)
+        }
+    }
+
     override fun getProvideToken(): Flow<String?> = dataStore.data.map { it[AUTH_PROVIDE_TOKEN] }
 
     override suspend fun setProvideToken(token: String) {

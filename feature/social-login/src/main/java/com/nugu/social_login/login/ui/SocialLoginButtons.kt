@@ -64,7 +64,10 @@ fun KakaoLoginButton(
             onLoginFail(error)
         }
         if (token != null) {
-            kakaoLogin?.getId { onLoginSuccess(it) }
+            kakaoLogin?.getId { token ->
+                kakaoLogin.logout { }
+                onLoginSuccess(token)
+            }
         }
     }
 
@@ -107,7 +110,10 @@ fun NaverLoginButton(
         onResult = { result ->
             when (result.resultCode) {
                 Activity.RESULT_OK -> {
-                    naverLogin?.getId { onLoginSuccess(it) }
+                    naverLogin?.getId { token ->
+                        naverLogin.logout()
+                        onLoginSuccess(token)
+                    }
                 }
                 Activity.RESULT_CANCELED -> {
                     val errorCode = NaverIdLoginSDK.getLastErrorCode().code
@@ -161,7 +167,10 @@ fun GoogleLoginButton(
 
             try {
                 completedTask.getResult(ApiException::class.java)?.also {
-                    googleLogin?.getId(activity) { onLoginSuccess(it) }
+                    googleLogin?.getId(activity) { token ->
+                        googleLogin.logout()
+                        onLoginSuccess(token)
+                    }
                 }
             } catch (e: ApiException) {
                 onLoginFail(e.statusCode, e.message)

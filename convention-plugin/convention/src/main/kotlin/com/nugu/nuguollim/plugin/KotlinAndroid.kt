@@ -1,6 +1,7 @@
 package com.nugu.nuguollim.plugin
 
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
@@ -35,6 +36,19 @@ internal fun Project.configureKotlinAndroid(
             )
 
             jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
+    }
+}
+
+internal fun LibraryExtension.configureBuildConfig() {
+    buildTypes {
+        release {
+            buildConfigField("String", "VERSION_NAME", "\"${VersionConstants.VERSION_NAME}\"")
+            buildConfigField("Integer", "VERSION_CODE", "${VersionConstants.VERSION_CODE}")
+        }
+        debug {
+            buildConfigField("String", "VERSION_NAME", "\"${VersionConstants.VERSION_NAME}\"")
+            buildConfigField("Integer", "VERSION_CODE", "${VersionConstants.VERSION_CODE}")
         }
     }
 }

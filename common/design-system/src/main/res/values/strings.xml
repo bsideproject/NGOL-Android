@@ -4,7 +4,7 @@
     <string name="login_help">로그인에 어려움이 있나요?</string>
     <string name="title_home">홈</string>
     <string name="title_template_search">템플릿 찾기</string>
-    <string name="title_community">커뮤니티</string>
+    <string name="title_my_page">마이</string>
 
     <string name="home_template_item_label_example">문의/답변</string>
     <string name="home_template_item_content_example">교수님 안녕하세요?\n
