@@ -12,9 +12,9 @@ data class AllPaperResponse(
 fun AllPaperResponse.asExternalModel(): List<Paper> {
     return data.flatMap { dataItem ->
         listOfNotNull(
-            dataItem.FANCY,
-            dataItem.SERIOUS,
-            dataItem.SIMPLE
+            dataItem.CRAFT,
+            dataItem.TIDY,
+            dataItem.FUNNY
         ).flatten().map { paper -> paper.asExternalModel() }
     }
 }

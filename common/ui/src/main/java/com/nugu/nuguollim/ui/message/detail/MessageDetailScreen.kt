@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.nugu.nuguollim.design_system.component.*
@@ -54,7 +55,8 @@ fun MessageDetailScreen(
             NuguMessageTextField(
                 modifier = Modifier.weight(0.4f),
                 richText = richTextValue,
-                enable = false
+                enable = false,
+                textAlign = TextAlign.Start,
             )
 
             Spacer(modifier = Modifier.height(16.dp))

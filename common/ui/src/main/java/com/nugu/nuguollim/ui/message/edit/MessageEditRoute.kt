@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -13,6 +14,7 @@ import com.mohamedrejeb.richeditor.model.RichTextPart
 import com.mohamedrejeb.richeditor.model.RichTextStyle
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.nugu.nuguollim.common.data.model.template.Template
+import com.nugu.nuguollim.common.data.model.template.Writing
 
 @Composable
 fun MessageEditRoute(
@@ -21,8 +23,8 @@ fun MessageEditRoute(
     template: Template,
     onClickTextCopy: (String) -> Unit = {},
     onClickTextShare: (String) -> Unit = {},
-    onClickImageSave: () -> Unit = {},
-    onClickImageShare: () -> Unit = {},
+    onClickImageSave: (ImageBitmap, Writing) -> Unit = { _, _ -> },
+    onClickImageShare: (ImageBitmap) -> Unit = {},
 ) {
     val activity = LocalContext.current as ComponentActivity
     val richTextValue = try {
@@ -51,7 +53,10 @@ fun MessageEditRoute(
         onClickTextCopy = onClickTextCopy,
         onClickTextShare = onClickTextShare,
         onClose = { activity.finish() },
-        onClickImageShare = onClickImageSave,
-        onClickSave = onClickImageShare
+        onClickImageShare = onClickImageShare,
+        onClickImageSave = { imageBitmap, writing ->
+            writing.templateId = template.id
+            onClickImageSave(imageBitmap, writing)
+        },
     )
 }

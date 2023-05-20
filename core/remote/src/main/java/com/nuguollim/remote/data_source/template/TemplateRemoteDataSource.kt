@@ -2,6 +2,7 @@ package com.nuguollim.remote.data_source.template
 
 import com.nuguollim.remote.model.template.AllTemplateResponse
 import com.nuguollim.remote.model.template.FavoriteResponse
+import com.nuguollim.remote.model.template.WritingResponse
 
 interface TemplateRemoteDataSource {
 
@@ -17,4 +18,10 @@ interface TemplateRemoteDataSource {
 
     suspend fun removeFavorite(id: Long): FavoriteResponse
 
+    suspend fun saveTemplate(
+        id: Long?,
+        content: String,
+        paper: String,
+        templateId: Long
+    ): WritingResponse
 }
