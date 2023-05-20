@@ -33,7 +33,9 @@ include(
     ":common:ui-core",
     ":common:exception",
     ":common:data",
+    ":common:system-info",
     ":feature:social-login",
     ":feature:search",
     ":feature:onboard",
+    ":feature:my_page",
 )

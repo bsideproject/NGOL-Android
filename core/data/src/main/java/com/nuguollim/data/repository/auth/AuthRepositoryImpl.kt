@@ -1,12 +1,16 @@
 package com.nuguollim.data.repository.auth
 
+import com.nugu.config.AuthConfig
 import com.nugu.data_store.data_source.auth.AuthLocalDataSource
 import com.nugu.nuguollim.common.data.model.auth.AuthInfo
+import com.nugu.nuguollim.common.data.model.auth.NickNameData
 import com.nugu.nuguollim.common.data.model.auth.SignUpData
 import com.nugu.nuguollim.common.data.model.auth.TokenData
+import com.nugu.nuguollim.common.data.model.auth.UserData
 import com.nuguollim.remote.data_source.auth.AuthRemoteDataSource
 import com.nuguollim.remote.model.auth.SignupResponse.Companion.asExternalModel
 import com.nuguollim.remote.model.auth.TokenResponse.Companion.asExternalModel
+import com.nuguollim.remote.model.auth.UserResponse.Companion.asExternalModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import okhttp3.RequestBody
@@ -34,10 +38,25 @@ class AuthRepositoryImpl @Inject constructor(
         authLocalDataSource.setAuthInfo(provideType, provideId)
     }
 
+    override suspend fun clearAuthInfo() {
+        AuthConfig.token = ""
+        authLocalDataSource.clearAuthInfo()
+    }
+
     override fun getProvideToken(): Flow<String?> = authLocalDataSource.getProvideToken()
 
     override suspend fun setProvideToken(token: String) {
         authLocalDataSource.setProvideToken(token)
     }
+
+    override fun getMyUserData(): Flow<UserData> =
+        authRemoteDataSource.getMyUserData().map { it.asExternalModel() }
+
+    override suspend fun unregister() {
+        authRemoteDataSource.unregister()
+    }
+
+    override suspend fun setNickName(nickname: String): NickNameData =
+        NickNameData(authRemoteDataSource.setNickName(nickname).message)
 
 }

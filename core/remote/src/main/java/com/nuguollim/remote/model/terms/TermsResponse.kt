@@ -5,7 +5,7 @@ import com.nugu.nuguollim.common.data.model.terms.Terms
 
 data class TermsResponse(
     @SerializedName("active") val active: Boolean,
-    @SerializedName("context") val context: String,
+    @SerializedName("link") val context: String,
     @SerializedName("id") val id: Long,
     @SerializedName("termsType") val termsType: String,
     @SerializedName("title") val title: String,

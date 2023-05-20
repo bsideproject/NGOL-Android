@@ -1,6 +1,7 @@
 package com.nuguollim.remote.service.template
 
 import com.nugu.config.AuthConfig
+import com.nuguollim.remote.model.template.AllMyWritingTemplateResponse
 import com.nuguollim.remote.model.template.AllTemplateResponse
 import com.nuguollim.remote.model.template.FavoriteResponse
 import com.nuguollim.remote.model.template.WritingResponse
@@ -39,4 +40,22 @@ interface TemplateService {
         @Query("templateId") templateId: Long,
         @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
     ): WritingResponse
+
+    @GET(value = "v1/templates/writings")
+    suspend fun getMyWritingTemplates(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 10,
+        @Query("sort", encoded = true) sort: String? = null,
+        @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
+    ): AllMyWritingTemplateResponse
+
+    @GET(value = "v1/users/templates")
+    suspend fun getFavoriteTemplates(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 10,
+        @Query("sort", encoded = true) sort: String? = null,
+        @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
+    ): AllTemplateResponse
+
+
 }

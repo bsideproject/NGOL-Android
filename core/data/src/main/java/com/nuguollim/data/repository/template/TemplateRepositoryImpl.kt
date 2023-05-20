@@ -1,5 +1,6 @@
 package com.nuguollim.data.repository.template
 
+import com.nugu.nuguollim.common.data.model.template.AllMyWritingTemplateData
 import com.nugu.nuguollim.common.data.model.template.AllTemplate
 import com.nugu.nuguollim.common.data.model.template.FavoriteData
 import com.nugu.nuguollim.common.data.model.template.Writing
@@ -43,4 +44,11 @@ class TemplateRepositoryImpl @Inject constructor(
             paper = writing.paper,
             templateId = writing.templateId,
         ).asExternalResponse()
+
+    override suspend fun getMyWritingTemplates(page: Int): AllMyWritingTemplateData =
+        templateRemoteDataSource.getMyWritingTemplates(page).asExternalModel()
+
+    override suspend fun getFavoriteTemplates(page: Int): AllTemplate =
+        templateRemoteDataSource.getFavoriteTemplates(page).asExternalModel()
+
 }
