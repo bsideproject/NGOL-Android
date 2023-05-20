@@ -2,7 +2,10 @@ package com.nuguollim.remote.model.paging
 
 import com.google.gson.annotations.SerializedName
 import com.nugu.nuguollim.common.data.model.paging.Paging
+import com.nugu.nuguollim.common.data.model.template.MyWritingTemplateData
 import com.nugu.nuguollim.common.data.model.template.Template
+import com.nuguollim.remote.model.template.MyWritingTemplateResponse
+import com.nuguollim.remote.model.template.MyWritingTemplateResponse.Companion.asExternalModel
 import com.nuguollim.remote.model.template.TemplateResponse
 import com.nuguollim.remote.model.template.asExternalModel
 
@@ -18,11 +21,26 @@ data class PagingResponse<T>(
     @SerializedName("empty") val empty: Boolean
 )
 
-fun PagingResponse<TemplateResponse>.asExternalModel(): Paging<Template>{
+fun PagingResponse<TemplateResponse>.asExternalModel(): Paging<Template> {
     val mappedContent = content.map { response -> response.asExternalModel() }
 
     return Paging(
         content = mappedContent,
+        pageable = pageable.asExternalModel(),
+        size = size,
+        number = number,
+        sort = sort.asExternalModel(),
+        first = first,
+        last = last,
+        numberOfElements = numberOfElements,
+        empty = empty
+    )
+}
+
+@JvmName("asExternalModelV2")
+fun PagingResponse<MyWritingTemplateResponse>.asExternalModel(): Paging<MyWritingTemplateData> {
+    return Paging(
+        content = content.map { it.asExternalModel() },
         pageable = pageable.asExternalModel(),
         size = size,
         number = number,

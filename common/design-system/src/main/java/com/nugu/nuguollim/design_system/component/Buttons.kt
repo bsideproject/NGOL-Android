@@ -3,7 +3,12 @@ package com.nugu.nuguollim.design_system.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.nugu.nuguollim.design_system.theme.Gray200
 import com.nugu.nuguollim.design_system.theme.Primary500
 import com.nugu.nuguollim.design_system.theme.pretendard
 
@@ -43,6 +49,40 @@ fun NuguFillButton(
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             color = Color.White,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun NuguFillButton(
+    modifier: Modifier = Modifier,
+    text: String = "",
+    active: Boolean = true,
+    activeButtonColor: Color = Primary500,
+    inactiveButtonColor: Color = Gray200,
+    activeTextColor: Color = Color.White,
+    inactiveTextColor: Color = Color.White,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                shape = RoundedCornerShape(5.dp),
+                color = if (active) activeButtonColor else inactiveButtonColor
+            )
+            .clickable { if (active) onClick() }
+            .padding(horizontal = 10.dp, vertical = 14.5.dp),
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = text,
+            fontFamily = pretendard,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            color = if (active) activeTextColor else inactiveTextColor,
             textAlign = TextAlign.Center
         )
     }

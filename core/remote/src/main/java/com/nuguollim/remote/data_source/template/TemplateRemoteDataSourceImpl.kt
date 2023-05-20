@@ -1,5 +1,6 @@
 package com.nuguollim.remote.data_source.template
 
+import com.nuguollim.remote.model.template.AllMyWritingTemplateResponse
 import com.nuguollim.remote.model.template.AllTemplateResponse
 import com.nuguollim.remote.model.template.FavoriteResponse
 import com.nuguollim.remote.service.template.TemplateService
@@ -29,5 +30,12 @@ class TemplateRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun removeFavorite(id: Long): FavoriteResponse =
         templateService.removeFavorite(id)
+
+    override suspend fun getMyWritingTemplates(page: Int): AllMyWritingTemplateResponse =
+        templateService.getMyWritingTemplates(page = page)
+
+    override suspend fun getFavoriteTemplates(page: Int): AllTemplateResponse =
+        templateService.getFavoriteTemplates(page)
+
 
 }

@@ -50,6 +50,7 @@ dependencies {
     implementation(projects.common.designSystem)
     implementation(projects.common.ui)
     implementation(projects.common.data)
+    implementation(projects.common.systemInfo)
     implementation(projects.feature.socialLogin)
     implementation(projects.feature.search)
     implementation(projects.feature.onboard)

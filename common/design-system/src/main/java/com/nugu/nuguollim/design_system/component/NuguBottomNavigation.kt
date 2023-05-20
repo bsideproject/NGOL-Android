@@ -2,7 +2,17 @@ package com.nugu.nuguollim.design_system.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -45,12 +55,12 @@ sealed class NuguBottomNavItem(
         "templateSearch"
     )
 
-    object Community :
+    object MyPage :
         NuguBottomNavItem(
-            R.string.title_community,
-            R.drawable.ic_community,
-            R.drawable.ic_community_selected,
-            "community"
+            R.string.title_my_page,
+            R.drawable.ic_template_my,
+            R.drawable.ic_template_my_selected,
+            "myPage"
         )
 }
 
@@ -64,7 +74,7 @@ fun NuguBottomNavigation(
     val items = listOf(
         NuguBottomNavItem.Home,
         NuguBottomNavItem.TemplateSearch,
-        NuguBottomNavItem.Community
+        NuguBottomNavItem.MyPage
     )
 
     Card(

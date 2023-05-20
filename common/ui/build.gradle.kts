@@ -26,13 +26,14 @@ dependencies {
 
     implementation(projects.feature.socialLogin)
     implementation(projects.feature.search)
+    implementation(projects.feature.myPage)
     implementation(projects.feature.onboard)
     implementation(projects.core.data)
     implementation(projects.core.paging)
+    implementation(projects.core.config)
     implementation(projects.common.designSystem)
     implementation(projects.common.di)
     implementation(projects.common.exception)
     implementation(projects.common.data)
     implementation(projects.common.uiCore)
-    implementation(projects.core.config)
 }

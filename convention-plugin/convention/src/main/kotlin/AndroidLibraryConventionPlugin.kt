@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.LibraryExtension
 import com.nugu.nuguollim.plugin.VersionConstants
+import com.nugu.nuguollim.plugin.configureBuildConfig
 import com.nugu.nuguollim.plugin.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,6 +17,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
+                configureBuildConfig()
                 defaultConfig.targetSdk = VersionConstants.TARGET_SDK
             }
         }

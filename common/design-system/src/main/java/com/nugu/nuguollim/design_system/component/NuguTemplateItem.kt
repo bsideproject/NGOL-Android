@@ -88,6 +88,34 @@ fun NuguTemplateItem(
     }
 }
 
+@Composable
+fun NuguTemplateItem(
+    modifier: Modifier = Modifier,
+    content: String = "",
+    onClick: () -> Unit = {}
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(10.dp),
+        border = BorderStroke(width = 1.dp, color = Color(0xFFD0D0D0))
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(start = 10.dp, end = 10.dp, top = 12.dp, bottom = 16.dp),
+        ) {
+            Text(
+                text = content,
+                fontFamily = pretendard,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = Black
+            )
+        }
+    }
+}
+
 
 @Composable
 fun NuguTemplateItem(
