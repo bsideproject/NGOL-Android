@@ -31,7 +31,7 @@ fun NuguImageSelectMenu(
     onSelectBackground: (String) -> Unit = {}
 ) {
     var openColorDialog by remember { mutableStateOf(false) }
-    var selectType by remember { mutableStateOf(PaperTheme.SERIOUS) }
+    var selectType by remember { mutableStateOf(PaperTheme.CRAFT) }
     var currentPaperList by remember { mutableStateOf(papers.filter { it.theme == selectType }) }
     val snapshotStateObserver =
         remember { SnapshotStateObserver { Snapshot.sendApplyNotifications() } }
@@ -65,19 +65,19 @@ fun NuguImageSelectMenu(
                 contentDescription = "color picker"
             )
             NuguChip(
-                text = PaperTheme.SIMPLE.title,
-                isChecked = selectType == PaperTheme.SIMPLE,
-                onClick = { selectType = PaperTheme.SIMPLE }
+                text = PaperTheme.CRAFT.title,
+                isChecked = selectType == PaperTheme.CRAFT,
+                onClick = { selectType = PaperTheme.CRAFT }
             )
             NuguChip(
-                text = PaperTheme.SERIOUS.title,
-                isChecked = selectType == PaperTheme.SERIOUS,
-                onClick = { selectType = PaperTheme.SERIOUS }
+                text = PaperTheme.TIDY.title,
+                isChecked = selectType == PaperTheme.TIDY,
+                onClick = { selectType = PaperTheme.TIDY }
             )
             NuguChip(
-                text = PaperTheme.FANCY.title,
-                isChecked = selectType == PaperTheme.FANCY,
-                onClick = { selectType = PaperTheme.FANCY }
+                text = PaperTheme.FUNNY.title,
+                isChecked = selectType == PaperTheme.FUNNY,
+                onClick = { selectType = PaperTheme.FUNNY }
             )
         }
         LazyRow(

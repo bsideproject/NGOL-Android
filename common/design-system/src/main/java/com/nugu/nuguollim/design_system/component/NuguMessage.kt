@@ -6,13 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohamedrejeb.richeditor.model.RichTextValue
@@ -34,6 +35,7 @@ fun NuguMessage(
     onCaptureBitmap: (ImageBitmap) -> Unit = {}
 ) {
     val maxTextLength = 400
+    var textAlign by remember { mutableStateOf(TextAlign.Start) }
 
     Box(
         modifier = modifier.background(
@@ -50,12 +52,19 @@ fun NuguMessage(
             imgBackground = imgBackground,
             onTextChange = onTextChange,
             onCaptureSuccess = onCaptureBitmap,
-            onCaptureFail = {}
+            onCaptureFail = {},
+            textAlign = textAlign
         )
 
         if (textEditMode) {
+            NuguMessageTool(
+                modifier = Modifier.fillMaxSize().padding(start = 20.dp, bottom = 8.dp),
+                messageRichText = textValue,
+                onTextChanged = onTextChange,
+                onTextAlignChanged = { textAlign = it }
+            )
             NuguMessageInfo(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(end = 20.dp, bottom = 11.5.dp),
                 messageRichText = textValue,
                 maxTextLength = maxTextLength
             )
@@ -71,6 +80,7 @@ fun NuguMessageContent(
     textValue: RichTextValue,
     imgColor: Color? = null,
     imgBackground: String? = null,
+    textAlign: TextAlign,
     onTextChange: (RichTextValue) -> Unit = {},
     onCaptureSuccess: (ImageBitmap) -> Unit = {},
     onCaptureFail: (Throwable) -> Unit = {}
@@ -100,16 +110,30 @@ fun NuguMessageContent(
             modifier = Modifier.fillMaxSize(),
             richText = textValue,
             enable = textEditMode,
-            onTextChange = onTextChange
+            onTextChange = onTextChange,
+            textAlign = textAlign
         )
     }
 }
 
 @Composable
 fun NuguMessageTool(
-
+    modifier: Modifier = Modifier,
+    messageRichText: RichTextValue,
+    onTextChanged: (RichTextValue) -> Unit,
+    onTextAlignChanged: (TextAlign) -> Unit = {},
 ) {
-
+    Box(
+        modifier = modifier
+    ) {
+        RichTextStyleRow(
+            modifier = Modifier
+                .align(Alignment.BottomStart),
+            value = messageRichText,
+            onValueChanged = onTextChanged,
+            onTextAlignChanged = onTextAlignChanged,
+        )
+    }
 }
 
 @Composable
@@ -125,8 +149,7 @@ fun NuguMessageInfo(
     ) {
         Text(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 20.dp, end = 16.dp),
+                .align(Alignment.BottomEnd),
             text = "${currentTextLength}/${maxTextLength}",
             fontFamily = pretendard,
             fontWeight = FontWeight.Normal,

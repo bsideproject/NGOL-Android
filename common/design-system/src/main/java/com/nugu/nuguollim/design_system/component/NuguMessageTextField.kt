@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.mohamedrejeb.richeditor.ui.material.RichTextEditor
@@ -23,6 +25,7 @@ fun NuguMessageTextField(
     richText: RichTextValue,
     enable: Boolean = true,
     maxTextLength: Int = 400,
+    textAlign: TextAlign,
     onTextChange: (RichTextValue) -> Unit = {}
 ) {
     val currentTextLength = richText.textFieldValue.text.length
@@ -47,6 +50,7 @@ fun NuguMessageTextField(
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
             ),
+            textStyle = LocalTextStyle.current.copy(textAlign = textAlign)
         )
     }
 }
@@ -74,6 +78,6 @@ private fun NuguMessageTextFieldPreview() {
                 )
             )
         }
-        NuguMessageTextField(richText = text) { text = it }
+        NuguMessageTextField(richText = text, textAlign = TextAlign.Center) { text = it }
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import com.mohamedrejeb.richeditor.model.RichTextStyle
 import com.mohamedrejeb.richeditor.model.RichTextValue
 import com.nugu.nuguollim.common.data.model.paper.Paper
 import com.nugu.nuguollim.common.data.model.template.Writing
@@ -33,7 +32,6 @@ fun MessageEditScreen(
     onClickImageSave: (ImageBitmap, Writing) -> Unit = { _, _ -> },
 ) {
     var openCopyDialog by remember { mutableStateOf(false) }
-    var openColorDialog by remember { mutableStateOf(false) }
     var textValue by remember { mutableStateOf(richTextValue) }
     var textEditMode by remember { mutableStateOf(true) }
     var imgColor by remember { mutableStateOf<Color?>(null) }
@@ -65,7 +63,7 @@ fun MessageEditScreen(
             modifier = modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .padding(start = 20.dp, end = 20.dp, bottom = 26.dp, top = 6.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = 35.dp, top = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NuguMessageTitle(
@@ -81,7 +79,7 @@ fun MessageEditScreen(
             Spacer(modifier = Modifier.height(16.dp))
             NuguMessage(
                 modifier = Modifier
-                    .weight(0.4f)
+                    .fillMaxWidth()
                     .aspectRatio(1f),
                 textValue = textValue,
                 textEditMode = textEditMode,
@@ -104,18 +102,15 @@ fun MessageEditScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.weight(1f))
             NuguMessageBottomMenu(
                 textEditMode = textEditMode,
-                text = textValue,
                 papers = papers,
-                onTextChanged = { textValue = it },
                 onClickTextCopy = {
                     onClickTextCopy(textValue.textFieldValue.text)
                     openCopyDialog = true
                 },
                 onClickTextShare = { onClickTextShare(textValue.textFieldValue.text) },
-                onClickColor = { openColorDialog = true },
                 onClickImgColor = {
                     imgColor = it
                     imgBackground = null
@@ -130,13 +125,6 @@ fun MessageEditScreen(
 
     if (openCopyDialog) {
         NuguMessageCopyDialog { openCopyDialog = false }
-    }
-    if (openColorDialog) {
-        HsvColorPickerDialog {
-            val colorStyle = RichTextStyle.TextColor(it)
-            textValue = textValue.toggleStyle(colorStyle)
-            openColorDialog = false
-        }
     }
 }
 
@@ -160,12 +148,9 @@ private fun NuguMessageTextMenu(
 private fun NuguMessageBottomMenu(
     modifier: Modifier = Modifier,
     textEditMode: Boolean,
-    text: RichTextValue,
     papers: List<Paper>,
-    onTextChanged: (RichTextValue) -> Unit,
     onClickTextCopy: () -> Unit = {},
     onClickTextShare: () -> Unit = {},
-    onClickColor: () -> Unit = {},
     onClickImgColor: (Color) -> Unit = {},
     onClickImgBackground: (String) -> Unit = {}
 ) {
@@ -177,11 +162,6 @@ private fun NuguMessageBottomMenu(
             NuguMessageTextMenu(
                 onClickTextCopy = onClickTextCopy,
                 onClickTextShare = onClickTextShare
-            )
-            RichTextStyleRow(
-                value = text,
-                onValueChanged = onTextChanged,
-                onClickColor = onClickColor
             )
         } else {
             NuguImageSelectMenu(
