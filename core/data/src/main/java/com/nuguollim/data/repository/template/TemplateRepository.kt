@@ -2,6 +2,7 @@ package com.nuguollim.data.repository.template
 
 import com.nugu.nuguollim.common.data.model.template.AllTemplate
 import com.nugu.nuguollim.common.data.model.template.FavoriteData
+import com.nugu.nuguollim.common.data.model.template.Writing
 
 interface TemplateRepository {
 
@@ -17,4 +18,5 @@ interface TemplateRepository {
 
     suspend fun removeFavorite(id: Long): FavoriteData
 
+    suspend fun saveTemplate(writing: Writing): Writing
 }

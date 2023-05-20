@@ -2,6 +2,7 @@ package com.nuguollim.remote.data_source.template
 
 import com.nuguollim.remote.model.template.AllTemplateResponse
 import com.nuguollim.remote.model.template.FavoriteResponse
+import com.nuguollim.remote.model.template.WritingResponse
 import com.nuguollim.remote.service.template.TemplateService
 import javax.inject.Inject
 
@@ -30,4 +31,16 @@ class TemplateRemoteDataSourceImpl @Inject constructor(
     override suspend fun removeFavorite(id: Long): FavoriteResponse =
         templateService.removeFavorite(id)
 
+    override suspend fun saveTemplate(
+        id: Long?,
+        content: String,
+        paper: String,
+        templateId: Long
+    ): WritingResponse =
+        templateService.saveTemplate(
+            id = id,
+            content = content,
+            paper = paper,
+            templateId = templateId
+        )
 }

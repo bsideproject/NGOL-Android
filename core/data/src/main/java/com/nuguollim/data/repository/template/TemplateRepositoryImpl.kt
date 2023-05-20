@@ -2,9 +2,11 @@ package com.nuguollim.data.repository.template
 
 import com.nugu.nuguollim.common.data.model.template.AllTemplate
 import com.nugu.nuguollim.common.data.model.template.FavoriteData
+import com.nugu.nuguollim.common.data.model.template.Writing
 import com.nuguollim.remote.data_source.template.TemplateRemoteDataSource
 import com.nuguollim.remote.model.template.FavoriteResponse.Companion.asExternalModel
 import com.nuguollim.remote.model.template.asExternalModel
+import com.nuguollim.remote.model.template.asExternalResponse
 import javax.inject.Inject
 
 class TemplateRepositoryImpl @Inject constructor(
@@ -34,4 +36,11 @@ class TemplateRepositoryImpl @Inject constructor(
     override suspend fun removeFavorite(id: Long): FavoriteData =
         templateRemoteDataSource.removeFavorite(id).asExternalModel()
 
+    override suspend fun saveTemplate(writing: Writing): Writing =
+        templateRemoteDataSource.saveTemplate(
+            id = writing.id,
+            content = writing.content,
+            paper = writing.paper,
+            templateId = writing.templateId,
+        ).asExternalResponse()
 }
