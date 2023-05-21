@@ -21,6 +21,7 @@ import androidx.core.content.FileProvider
 import androidx.navigation.compose.rememberNavController
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.Writing
+import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.nuguollim.navigation.MessageNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -41,15 +42,22 @@ class MessageActivity : ComponentActivity() {
 
             Scaffold(
             ) { innerPadding ->
-                MessageNavHost(
-                    modifier = Modifier.padding(innerPadding),
-                    navHostController = navController,
-                    template = getTemplate(),
-                    onClickTextCopy = { setClipboardText(it) },
-                    onClickTextShare = { shareText(it) },
-                    onClickImageSave = { imageBitmap, writing -> saveImage(imageBitmap, writing) },
-                    onClickImageShare = { shareImage(it) }
-                )
+                NuguollimTheme {
+                    MessageNavHost(
+                        modifier = Modifier.padding(innerPadding),
+                        navHostController = navController,
+                        template = getTemplate(),
+                        onClickTextCopy = { setClipboardText(it) },
+                        onClickTextShare = { shareText(it) },
+                        onClickImageSave = { imageBitmap, writing ->
+                            saveImage(
+                                imageBitmap,
+                                writing
+                            )
+                        },
+                        onClickImageShare = { shareImage(it) }
+                    )
+                }
             }
         }
     }
