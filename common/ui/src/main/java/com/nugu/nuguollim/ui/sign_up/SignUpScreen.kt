@@ -2,25 +2,12 @@ package com.nugu.nuguollim.ui.sign_up
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,13 +19,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.nugu.nuguollim.common.data.model.auth.TokenData
 import com.nugu.nuguollim.common.data.model.terms.Terms
 import com.nugu.nuguollim.design_system.component.NuguFillButton
 import com.nugu.nuguollim.design_system.component.NuguNameTextField
+import com.nugu.nuguollim.design_system.component.TermDialog
 import com.nugu.nuguollim.design_system.component.TermsCheckBox
 import com.nugu.nuguollim.design_system.theme.pretendard
 import com.nugu.nuguollim.ui.DevicePreviews
-import com.nugu.nuguollim.common.data.model.auth.TokenData
 import com.nuguollim.data.state.ResultState
 import com.nuguollim.data.usecase.auth.AuthProvide
 
@@ -71,7 +59,8 @@ fun SignUpRoute(
     }
 
     SignUpScreen(termsList) { terms, provideName ->
-        val signupTermsList = terms.filter { it.value }.map { AuthProvide.Terms(it.key.id) }.toList()
+        val signupTermsList =
+            terms.filter { it.value }.map { AuthProvide.Terms(it.key.id) }.toList()
         viewModel.signUp(provideType, provideId, provideName, signupTermsList)
     }
 }
@@ -109,7 +98,6 @@ fun SignUpScreen(
             TermsMenu(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 termsList = termsList,
-                onClickTerms = {},
                 onClickSignUp = { onClickSignUp(it, AuthProvide.Name(name)) }
             )
         }
@@ -120,9 +108,12 @@ fun SignUpScreen(
 fun TermsMenu(
     modifier: Modifier = Modifier,
     termsList: List<Terms> = emptyList(),
-    onClickTerms: (Long) -> Unit = {},
     onClickSignUp: (Map<Terms, Boolean>) -> Unit = {}
 ) {
+
+    var openDialog by remember { mutableStateOf(false) }
+    var lastLink by remember { mutableStateOf("") }
+
     Column(
         modifier = modifier
             .background(
@@ -164,7 +155,10 @@ fun TermsMenu(
                     text = terms.title,
                     checked = checked,
                     onChecked = { isCheck -> checkTermsMap[terms] = isCheck },
-                    onClickMore = { onClickTerms(terms.id) }
+                    onClickMore = {
+                        lastLink = terms.link
+                        openDialog = true
+                    }
                 )
             }
         }
@@ -173,6 +167,10 @@ fun TermsMenu(
             text = "가입 완료하기",
             active = canSignUp,
             onClick = { onClickSignUp(checkTermsMap.toMap()) })
+    }
+
+    if (openDialog) {
+        TermDialog(lastLink) { openDialog = false }
     }
 }
 
