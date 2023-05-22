@@ -2,7 +2,11 @@ package com.nugu.nuguollim.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import androidx.paging.cachedIn
 import com.nugu.nuguollim.common.data.model.template.AllTemplate
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.TemplateSort
@@ -61,5 +65,9 @@ class HomeViewModel @Inject constructor(
         }
 
         return TemplatePagingSource(onResponse)
+    }
+
+    fun refresh() {
+        _pagingSource.value = getTemplatePagingSource()
     }
 }

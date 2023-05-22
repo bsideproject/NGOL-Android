@@ -2,6 +2,7 @@ package com.nugu.search.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,6 +60,7 @@ fun SearchTextField(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .border(borderStroke, RoundedCornerShape(5.dp))
+            .background(Color.White, RoundedCornerShape(5.dp))
             .padding(start = 10.dp)
     ) {
         SearchImageButton(onClick = onSearch)

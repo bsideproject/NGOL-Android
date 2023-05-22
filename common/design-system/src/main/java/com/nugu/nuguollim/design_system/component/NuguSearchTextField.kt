@@ -34,12 +34,13 @@ import com.nugu.nuguollim.design_system.theme.pretendard
 @Composable
 fun NuguSearchTextField(
     modifier: Modifier = Modifier,
-    onSearchText: (String) -> Unit = {}
+    searchText: String = "",
+    onSearchText: (String) -> Unit = {},
+    onValueChange: (String) -> Unit = {},
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
-    var searchText by remember { mutableStateOf("") }
     val leadingPainter = painterResource(id = R.drawable.ic_search)
 
     Column(
@@ -51,7 +52,7 @@ fun NuguSearchTextField(
                 .height(46.dp)
                 .focusRequester(focusRequester),
             value = searchText,
-            onValueChange = { searchText = it },
+            onValueChange = onValueChange,
             maxLines = 1,
             singleLine = true,
             textStyle = TextStyle(
