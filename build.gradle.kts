@@ -5,6 +5,10 @@ buildscript {
         mavenCentral()
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
+    dependencies {
+        classpath(libs.firebase.crashlytics.gradle)
+        classpath(libs.android.play.services)
+    }
 }
 
 plugins {

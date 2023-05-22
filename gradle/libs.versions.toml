@@ -30,6 +30,10 @@ coil = "2.2.2"
 lottie = "6.0.0"
 secretGradlePlugin = "2.0.1"
 json = "20230227"
+firebaseBom = "32.0.0"
+firebaseCrashlyticsGradle = "2.9.5"
+
+androidPlayServices = "4.3.15"
 
 javax = "1"
 
@@ -85,6 +89,12 @@ data-store = { module = "androidx.datastore:datastore-preferences", version.ref 
 data-store-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "dataStore" }
 flow-layout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "flowLayout" }
 lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+
+android-play-services = { module = "com.google.gms:google-services", version.ref = "androidPlayServices" }
+
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
