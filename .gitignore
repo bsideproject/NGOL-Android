@@ -17,3 +17,5 @@ local.properties
 /.idea/
 /convention-plugin/build/
 /convention-plugin/convention/build/
+/app/release/
+/keystore/
