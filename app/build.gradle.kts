@@ -1,3 +1,7 @@
+import com.nugu.nuguollim.plugin.VersionConstants
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("nuguollim.android.application")
     id("nuguollim.android.application.compose")
@@ -8,11 +12,26 @@ plugins {
 android {
     defaultConfig {
         applicationId = "com.nugu.nuguollim"
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = VersionConstants.VERSION_CODE
+        versionName = VersionConstants.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled = true
+    }
+
+    signingConfigs {
+        val releaseSigningConfig by creating {
+            val properties = Properties().apply {
+                load(FileInputStream("${rootDir}/local.properties"))
+            }
+            storeFile = file("${rootDir}/${properties["keystore"]}")
+            keyAlias = "${properties["key_alias"]}"
+            keyPassword = "${properties["key_password"]}"
+            storePassword = "${properties["store_password"]}"
+            enableV1Signing = true
+            enableV2Signing = true
+        }
     }
 
     buildTypes {
@@ -22,6 +41,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("releaseSigningConfig")
+        }
+        debug {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("releaseSigningConfig")
         }
     }
 

@@ -26,6 +26,7 @@ import com.nugu.my_page.component.MyProfileSetting
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
 import com.nugu.nuguollim.design_system.component.NuguSwitch
+import com.nugu.nuguollim.design_system.component.TermDialog
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.nuguollim.ui.my_page.component.MyFavoriteTemplates
 import com.nugu.nuguollim.ui.my_page.component.MyNickNameChangeDialog
@@ -62,11 +63,13 @@ fun MyPageScreen(
     onClickTemplate: (Template) -> Unit = {},
 ) {
     val myUserData by viewModel.myUserData.collectAsStateWithLifecycle()
+    val termsData by viewModel.termsState.collectAsStateWithLifecycle()
     val myWritingTemplates = viewModel.myWritingTemplates.collectAsLazyPagingItems()
     val favoriteTemplates = viewModel.favoriteTemplates.collectAsLazyPagingItems()
 
     var showWriteScreen by remember { mutableStateOf(true) }
     var showNickNameChangeDialog by remember { mutableStateOf(false) }
+    var showTermsDialog by remember { mutableStateOf(false) }
     var nickname by remember { mutableStateOf("") }
 
     if (showNickNameChangeDialog) {
@@ -84,6 +87,13 @@ fun MyPageScreen(
         )
     }
 
+    if (termsData is ResultState.Success && showTermsDialog) {
+        TermDialog(
+            link = termsData.successData.first().link,
+            onDismissRequest = { showTermsDialog = false }
+        )
+    }
+
     if (myUserData is ResultState.Success) {
         LaunchedEffect(myUserData) {
             nickname = myUserData.successData.nickname
@@ -96,6 +106,10 @@ fun MyPageScreen(
                 nickname = nickname,
                 providerType = myUserData.successData.providerType,
                 onNicknameChange = { showNickNameChangeDialog = true },
+                onTermsPage = { termsTitle ->
+                    viewModel.getTerms(termsTitle)
+                    showTermsDialog = true
+                },
                 onSendMail = { onSendMail.invoke(nickname, it) },
                 onLogout = {
                     viewModel.clearAuthInfo { onMoveLoginPage.invoke() }
@@ -137,6 +151,7 @@ private fun MyPageNickNameSettingScreen(
     modifier: Modifier = Modifier,
     nickname: String,
     providerType: String,
+    onTermsPage: (String) -> Unit = {},
     onNicknameChange: () -> Unit = {},
     onSendMail: (String) -> Unit = {},
     onLogout: () -> Unit = {},
@@ -147,6 +162,7 @@ private fun MyPageNickNameSettingScreen(
     if (showSettingDialog) {
         MyPageSettingDialog(
             providerType = providerType,
+            onTermsPage = onTermsPage,
             onDismissRequest = { showSettingDialog = false },
             onSendMail = onSendMail,
             onLogout = onLogout,

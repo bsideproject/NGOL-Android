@@ -14,7 +14,7 @@ object StringUtil {
         var startIndex = text.indexOf(keyword)
         append(text)
 
-        while (startIndex >= 0) {
+        while (keyword.isNotEmpty() && startIndex >= 0) {
             val endIndex = startIndex + keyword.length
             addStyle(style, startIndex, endIndex)
             startIndex = text.indexOf(keyword, endIndex)

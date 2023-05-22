@@ -25,6 +25,7 @@ fun NuguMessageImage(
             )
         } else if (imageUrl != null) {
             AsyncImage(
+                modifier = Modifier.fillMaxSize(),
                 model = imageUrl,
                 contentDescription = null
             )

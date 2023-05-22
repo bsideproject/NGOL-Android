@@ -43,9 +43,8 @@ fun NuguNameTextField(
     val offsetX = remember { Animatable(0f) }
     val view = LocalView.current
     val painter = painterResource(id = R.drawable.ic_delete_text)
-    val pattern = Pattern.compile("^$|[a-zA-Z0-9가-힣]+$")
-    val maxByte = 18
-    val maxLength = maxByte / 3
+    val pattern = Pattern.compile("^$|[a-zA-Z0-9ㄱ-힣]+$")
+    val maxLength = 6
 
     Column(
         modifier = modifier
@@ -55,10 +54,10 @@ fun NuguNameTextField(
             value = name,
             onValueChange = {
                 val isMatch = pattern.matcher(it).matches()
-                val byteSize = it.toByteArray().size
-                if (byteSize <= maxByte && isMatch) {
+                val length = it.length
+                if (length <= maxLength && isMatch) {
                     onValueChange(it)
-                } else if (byteSize > maxByte) {
+                } else if (length > maxLength) {
                     animateView(offsetX, coroutineScope, view)
                 }
             },
@@ -98,7 +97,7 @@ fun NuguNameTextField(
         Text(
             text = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = Color(0xFF151516))) {
-                    append("${name.toByteArray().size / 3}")
+                    append("${name.length}")
                 }
                 withStyle(style = SpanStyle(color = Color(0xFF858585))) {
                     append("/${maxLength}")
