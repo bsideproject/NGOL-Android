@@ -12,6 +12,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
                 apply("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+                apply("com.google.firebase.crashlytics")
+                apply("com.google.gms.google-services")
             }
 
             extensions.configure<ApplicationExtension> {
