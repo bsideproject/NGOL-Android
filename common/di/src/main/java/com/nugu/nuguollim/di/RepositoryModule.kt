@@ -8,6 +8,8 @@ import com.nuguollim.data.repository.splash.SplashRepository
 import com.nuguollim.data.repository.splash.SplashRepositoryImpl
 import com.nuguollim.data.repository.template.TemplateRepository
 import com.nuguollim.data.repository.template.TemplateRepositoryImpl
+import com.nuguollim.data.repository.terms.TermsRepository
+import com.nuguollim.data.repository.terms.TermsRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,6 +27,9 @@ interface RepositoryModule {
 
     @Binds
     fun bindsTemplateRepository(templateRepository: TemplateRepositoryImpl): TemplateRepository
+
+    @Binds
+    fun bindsTermsRepository(termsRepository: TermsRepositoryImpl): TermsRepository
 
     @Binds
     fun bindsSplashRepository(splashRepository: SplashRepositoryImpl): SplashRepository
