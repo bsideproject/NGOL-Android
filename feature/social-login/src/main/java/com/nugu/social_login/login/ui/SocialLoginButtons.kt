@@ -6,18 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -32,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,11 +31,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.navercorp.nid.NaverIdLoginSDK
 import com.nugu.nuguollim.design_system.R
-import com.nugu.nuguollim.design_system.theme.Gray1
-import com.nugu.nuguollim.design_system.theme.Gray2
-import com.nugu.nuguollim.design_system.theme.Gray3
-import com.nugu.nuguollim.design_system.theme.KakaoTextBlack
-import com.nugu.nuguollim.design_system.theme.pretendard
+import com.nugu.nuguollim.design_system.theme.*
 import com.nugu.social_login.login.GoogleLogin
 import com.nugu.social_login.login.KakaoLogin
 import com.nugu.social_login.login.NaverLogin
@@ -188,7 +174,7 @@ fun GoogleLoginButton(
             backgroundColor = Color.White,
             contentColor = Color.White
         ),
-        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 13.5.dp),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
         onClick = { googleLogin?.login(activity, launcher) },
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp,
@@ -196,22 +182,24 @@ fun GoogleLoginButton(
             disabledElevation = 0.dp
         )
     ) {
-        Row(
+        Box(
             modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(24.dp)
+                    .align(Alignment.CenterStart),
                 painter = painter,
                 contentDescription = "google logo",
                 contentScale = ContentScale.Fit
             )
-            Spacer(modifier = Modifier.width(50.dp))
             Text(
+                modifier = Modifier
+                    .align(Alignment.Center),
                 text = stringResource(id = R.string.login_google),
                 fontFamily = pretendard,
                 color = Color.Black,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
             )
         }
     }
