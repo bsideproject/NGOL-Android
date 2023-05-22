@@ -1,6 +1,7 @@
 package com.nugu.nuguollim.ui.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -21,13 +26,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,13 +54,15 @@ import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.TemplateSort
 import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
 import com.nugu.nuguollim.design_system.component.NuguDropDownMenu
-import com.nugu.nuguollim.design_system.component.NuguSearchTextField
 import com.nugu.nuguollim.design_system.component.NuguTemplateItem
 import com.nugu.nuguollim.design_system.theme.Black
 import com.nugu.nuguollim.design_system.theme.Primary500
 import com.nugu.nuguollim.design_system.theme.pretendard
 import com.nugu.nuguollim.ui.R
+import com.nugu.search.component.SearchTextField
+import com.nugu.ui_core.addFocusCleaner
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeRoute(
@@ -56,7 +70,12 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
     onClickTemplate: (Template) -> Unit = {}
 ) {
+    val focusRequester by remember { mutableStateOf(FocusRequester()) }
+    var isFocused by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
+        modifier = Modifier.addFocusCleaner(focusManager) { isFocused = false },
         bottomBar = { NuguBottomNavigation(navController = navController) }
     ) { innerPadding ->
         val currentTemplates = viewModel.templatePaging.collectAsLazyPagingItems()
@@ -64,6 +83,10 @@ fun HomeRoute(
         HomeScreen(
             modifier = Modifier.padding(innerPadding),
             templatePaging = currentTemplates,
+            isFocused = isFocused,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
+            onFocusChanged = { isFocused = it },
             onSortChanged = { viewModel.setSort(it.sortText) },
             onSearchText = { viewModel.setKeyword(it) },
             onFavorite = { id, isFavorite ->
@@ -73,7 +96,11 @@ fun HomeRoute(
                     viewModel.removeFavorite(id)
                 }
             },
-            onTemplateClick = { onClickTemplate(it) }
+            onTemplateClick = { onClickTemplate(it) },
+            onRefresh = {
+                focusManager.clearFocus()
+                viewModel.refresh()
+            }
         )
     }
 }
@@ -82,18 +109,37 @@ fun HomeRoute(
 fun HomeScreen(
     modifier: Modifier = Modifier,
     templatePaging: LazyPagingItems<Template> = flowOf(PagingData.from(listOf<Template>())).collectAsLazyPagingItems(),
+    isFocused: Boolean = false,
+    focusManager: FocusManager = LocalFocusManager.current,
+    focusRequester: FocusRequester = FocusRequester(),
+    onFocusChanged: (Boolean) -> Unit = {},
     onSortChanged: (TemplateSort) -> Unit = {},
     onTemplateClick: (Template) -> Unit = {},
     onSearchText: (String) -> Unit = {},
-    onFavorite: (Long, Boolean) -> Unit = { _, _ -> }
+    onFavorite: (Long, Boolean) -> Unit = { _, _ -> },
+    onRefresh: () -> Unit = {},
 ) {
+    val scrollState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = modifier
     ) {
         HomeSearchBar(
-            onSearchText = onSearchText
+            onSearchText = onSearchText,
+            isFocused = isFocused,
+            focusRequester = focusRequester,
+            focusManager = focusManager,
+            onFocusChanged = onFocusChanged,
+            onRefresh = {
+                coroutineScope.launch {
+                    scrollState.scrollToItem(0)
+                    onRefresh.invoke()
+                }
+            }
         )
         HomeSearchListMenu(
+            scrollState = scrollState,
             templatePaging = templatePaging,
             onItemClicked = onTemplateClick,
             onSortChanged = onSortChanged,
@@ -105,8 +151,15 @@ fun HomeScreen(
 @Composable
 fun HomeSearchBar(
     modifier: Modifier = Modifier,
-    onSearchText: (String) -> Unit = {}
+    isFocused: Boolean,
+    focusManager: FocusManager,
+    focusRequester: FocusRequester,
+    onFocusChanged: (Boolean) -> Unit = {},
+    onSearchText: (String) -> Unit = {},
+    onRefresh: () -> Unit = {}
 ) {
+    var searchText by remember { mutableStateOf("") }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -114,7 +167,9 @@ fun HomeSearchBar(
             .padding(bottom = 20.dp, start = 20.dp, end = 20.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
@@ -122,7 +177,11 @@ fun HomeSearchBar(
                 contentDescription = "logo",
                 modifier = Modifier
                     .width(62.dp)
-                    .height(20.54.dp),
+                    .height(20.54.dp)
+                    .clickable {
+                        searchText = ""
+                        onRefresh.invoke()
+                    },
                 tint = Color.White
             )
         }
@@ -137,15 +196,33 @@ fun HomeSearchBar(
         )
         Spacer(modifier = Modifier.height(26.dp))
 
-        NuguSearchTextField(
-            modifier = Modifier.fillMaxWidth(),
-            onSearchText = onSearchText
+        SearchTextField(
+            value = searchText,
+            isFocused = isFocused,
+            placeHolder = "검색어를 입력해주세요.",
+            onClear = { searchText = "" },
+            onValueChange = { searchText = it },
+            onSearch = { onSearchText.invoke(searchText) },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    focusManager.clearFocus()
+                    onSearchText.invoke(searchText)
+                }
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(46.dp)
+                .align(Alignment.CenterHorizontally)
+                .focusRequester(focusRequester)
+                .onFocusChanged { onFocusChanged.invoke(it.isFocused) }
         )
     }
 }
 
 @Composable
 fun HomeSearchListMenu(
+    scrollState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
     templatePaging: LazyPagingItems<Template> = flowOf(PagingData.from(listOf<Template>())).collectAsLazyPagingItems(),
     onSortChanged: (TemplateSort) -> Unit = {},
@@ -181,6 +258,7 @@ fun HomeSearchListMenu(
         }
         Spacer(modifier = Modifier.height(12.dp))
         LazyColumn(
+            state = scrollState,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             when (val state = templatePaging.loadState.refresh) {
