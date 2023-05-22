@@ -99,7 +99,6 @@ fun ThemeSearchScreen(
                     var isFavorite by remember { mutableStateOf(contentData.favorite) }
 
                     NuguTemplateItem(
-                        modifier = Modifier.height(122.dp),
                         label = contentData.theme,
                         content = contentData.content,
                         isFavorite = isFavorite,

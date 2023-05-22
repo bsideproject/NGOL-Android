@@ -14,6 +14,7 @@ import com.nuguollim.data.repository.template.TemplateRepositoryImpl
 import com.nuguollim.data.usecase.template.AddFavoriteUseCase
 import com.nuguollim.data.usecase.template.RemoveFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -68,6 +69,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun refresh() {
+        this.keyword = ""
+        this.sort = TemplateSort.values().first().sortText
         _pagingSource.value = getTemplatePagingSource()
+    }
+
+    var isFinish = false
+    fun backPress() {
+        viewModelScope.launch {
+            isFinish = true
+            delay(2000)
+            isFinish = false
+        }
     }
 }

@@ -32,7 +32,6 @@ internal fun ColumnScope.MyFavoriteTemplates(
                     var isFavorite by remember { mutableStateOf(contentData.favorite) }
 
                     NuguTemplateItem(
-                        modifier = Modifier.height(122.dp),
                         label = contentData.theme,
                         content = contentData.content,
                         isFavorite = isFavorite,
@@ -60,7 +59,6 @@ internal fun ColumnScope.MyWritingTemplates(
             items(myWritingTemplates) { contentData ->
                 if (contentData != null) {
                     NuguTemplateItem(
-                        modifier = Modifier.height(122.dp),
                         content = contentData.content,
                         onClick = {}
                     )

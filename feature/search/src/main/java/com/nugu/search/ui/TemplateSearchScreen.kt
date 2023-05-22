@@ -101,7 +101,6 @@ fun TemplateSearchScreen(
                             style = SpanStyle(color = Primary500)
                         )
                         NuguTemplateItem(
-                            modifier = Modifier,
                             target = target,
                             label = label,
                             content = content,
@@ -118,7 +117,7 @@ fun TemplateSearchScreen(
             }
         }
     } else {
-        ThemeSearchEmpty(
+        TemplateSearchEmptyScreen(
             modifier = Modifier.padding(bottom = 2.dp),
             keyword = keyword,
             onNavigateToSearchHome = onNavigateToSearchHome
@@ -127,7 +126,7 @@ fun TemplateSearchScreen(
 }
 
 @Composable
-private fun ThemeSearchEmpty(
+fun TemplateSearchEmptyScreen(
     modifier: Modifier = Modifier,
     keyword: String,
     onNavigateToSearchHome: () -> Unit = {}
@@ -165,6 +164,7 @@ private fun ThemeSearchEmpty(
             text = stringResource(R.string.description_search_template_empty_button_text),
             onClick = onNavigateToSearchHome
         )
+        Spacer(modifier = Modifier.padding(top = 20.dp))
         Spacer(modifier = Modifier.weight(1f))
         Column(
             modifier = Modifier
