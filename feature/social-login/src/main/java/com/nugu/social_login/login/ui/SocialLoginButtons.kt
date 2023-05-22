@@ -174,7 +174,7 @@ fun GoogleLoginButton(
             backgroundColor = Color.White,
             contentColor = Color.White
         ),
-        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 13.5.dp),
+        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 0.dp),
         onClick = { googleLogin?.login(activity, launcher) },
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp,
