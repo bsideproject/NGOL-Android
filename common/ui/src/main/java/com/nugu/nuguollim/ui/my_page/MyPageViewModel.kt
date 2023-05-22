@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.nugu.nuguollim.common.data.model.terms.Terms
 import com.nugu.paging.template.FavoriteTemplatePagingSource
 import com.nugu.paging.template.MyWritingTemplatePagingSource
 import com.nuguollim.data.state.ResultState
@@ -16,9 +17,15 @@ import com.nuguollim.data.usecase.template.AddFavoriteUseCase
 import com.nuguollim.data.usecase.template.GetFavoriteTemplatesUseCase
 import com.nuguollim.data.usecase.template.GetMyWritingTemplatesUseCase
 import com.nuguollim.data.usecase.template.RemoveFavoriteUseCase
+import com.nuguollim.data.usecase.terms.GetTermsUseCase
+import com.nuguollim.data.util.mutableResultStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +38,7 @@ class MyPageViewModel @Inject constructor(
     private val setNickNameUseCase: SetNickNameUseCase,
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
+    private val getTermsUseCase: GetTermsUseCase,
     private val getMyWritingTemplatesUseCase: GetMyWritingTemplatesUseCase,
     private val myWritingTemplatePagingSource: MyWritingTemplatePagingSource.Factory,
     private val getFavoriteTemplatesUseCase: GetFavoriteTemplatesUseCase,
@@ -58,6 +66,9 @@ class MyPageViewModel @Inject constructor(
         ),
         pagingSourceFactory = { favoriteTemplatePagingSource.create(getFavoriteTemplatesUseCase) }
     ).flow
+
+    private val _termsState = mutableResultStateFlow<List<Terms>>()
+    val termsState = _termsState.asStateFlow()
 
     fun setNickName(
         nickname: String,
@@ -99,4 +110,11 @@ class MyPageViewModel @Inject constructor(
     fun removeFavorite(id: Long) {
         viewModelScope.launch { removeFavoriteUseCase.run(id) }
     }
+
+    fun getTerms(termsTitle: String) {
+        getTermsUseCase.run(termsTitle)
+            .onEach { _termsState.value = it }
+            .launchIn(viewModelScope)
+    }
+
 }

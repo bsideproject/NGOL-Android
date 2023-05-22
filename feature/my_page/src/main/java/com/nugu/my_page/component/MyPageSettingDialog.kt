@@ -47,6 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MyPageSettingDialog(
     providerType: String,
+    onTermsPage: (String) -> Unit = {},
     onDismissRequest: () -> Unit = {},
     onSendMail: (String) -> Unit = {},
     onLogout: () -> Unit = {},
@@ -96,8 +97,7 @@ fun MyPageSettingDialog(
                 ) {
                     MyPageSettingScreen(
                         modifier = Modifier.padding(paddingValues),
-                        onTermsPage = {},
-                        onPrivacyPolicyPage = {},
+                        onTermsPage = onTermsPage,
                         onSendMail = onSendMail,
                         onLogoutClick = { showLogoutDialog = true },
                         onUnRegisterClick = {
@@ -134,8 +134,7 @@ fun MyPageSettingDialog(
 @Composable
 private fun MyPageSettingScreen(
     modifier: Modifier = Modifier,
-    onTermsPage: () -> Unit = {},
-    onPrivacyPolicyPage: () -> Unit = {},
+    onTermsPage: (String) -> Unit = {},
     onSendMail: (String) -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onUnRegisterClick: () -> Unit = {}
@@ -151,12 +150,12 @@ private fun MyPageSettingScreen(
                 MyPageMenu(
                     text = "이용 약관",
                     singleClickListener = singleClickListener,
-                    onClick = onTermsPage
+                    onClick = { onTermsPage.invoke("서비스 이용약관") }
                 )
                 MyPageMenu(
                     text = "개인정보처리방침",
                     singleClickListener = singleClickListener,
-                    onClick = onPrivacyPolicyPage
+                    onClick = { onTermsPage.invoke("개인정보 처리방침") }
                 )
                 MyPageMenu(
                     text = "이용 문의",
