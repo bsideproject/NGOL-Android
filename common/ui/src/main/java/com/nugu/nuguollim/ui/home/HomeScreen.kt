@@ -171,6 +171,7 @@ fun HomeScreen(
             onSearchText = { keyword ->
                 inputKeyword = keyword
                 searchKeyword = keyword
+                onSearchText.invoke(keyword)
             },
             isFocused = isFocused,
             focusRequester = focusRequester,
