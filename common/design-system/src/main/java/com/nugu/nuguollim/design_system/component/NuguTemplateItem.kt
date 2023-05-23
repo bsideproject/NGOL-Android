@@ -88,34 +88,6 @@ fun NuguTemplateItem(
     }
 }
 
-@Composable
-fun NuguTemplateItem(
-    modifier: Modifier = Modifier,
-    content: String = "",
-    onClick: () -> Unit = {}
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(10.dp),
-        border = BorderStroke(width = 1.dp, color = Color(0xFFD0D0D0))
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(start = 10.dp, end = 10.dp, top = 12.dp, bottom = 16.dp),
-        ) {
-            Text(
-                text = content,
-                fontFamily = pretendard,
-                fontWeight = FontWeight.Normal,
-                fontSize = 14.sp,
-                color = Black
-            )
-        }
-    }
-}
-
 
 @Composable
 fun NuguTemplateItem(
@@ -180,6 +152,78 @@ fun NuguTemplateItem(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 NuguFavorite(isFavorite = isFavorite, onClick = onClickFavorite)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = content,
+                fontFamily = pretendard,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = Black
+            )
+        }
+    }
+}
+
+@Composable
+fun NuguTemplateItem(
+    modifier: Modifier = Modifier,
+    target: String,
+    theme: String,
+    content: String,
+    onClick: () -> Unit = {},
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(10.dp),
+        border = BorderStroke(width = 1.dp, color = Color(0xFFD0D0D0))
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(start = 10.dp, end = 10.dp, top = 12.dp, bottom = 16.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Chip(
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = target,
+                            fontFamily = pretendard,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            color = Black
+                        )
+                    },
+                    colors = ChipDefaults.outlinedChipColors(
+                        backgroundColor = Color.White,
+                        contentColor = Black
+                    ),
+                    border = BorderStroke(1.dp, Black)
+                )
+                Spacer(modifier = Modifier.padding(start = 4.dp))
+                Chip(
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = theme,
+                            fontFamily = pretendard,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 12.sp,
+                            color = Black
+                        )
+                    },
+                    colors = ChipDefaults.outlinedChipColors(
+                        backgroundColor = Color.White,
+                        contentColor = Black
+                    ),
+                    border = BorderStroke(1.dp, Black)
+                )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
