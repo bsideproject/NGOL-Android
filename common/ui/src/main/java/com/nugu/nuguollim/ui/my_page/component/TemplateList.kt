@@ -2,7 +2,6 @@ package com.nugu.nuguollim.ui.my_page.component
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -52,15 +51,18 @@ internal fun ColumnScope.MyFavoriteTemplates(
 
 @Composable
 internal fun ColumnScope.MyWritingTemplates(
-    myWritingTemplates: LazyPagingItems<MyWritingTemplateData>
+    myWritingTemplates: LazyPagingItems<MyWritingTemplateData>,
+    onClickTemplate: (Template) -> Unit = {}
 ) {
     if (myWritingTemplates.itemCount > 0) {
         LazyColumn(modifier = Modifier.padding(top = 20.dp)) {
             items(myWritingTemplates) { contentData ->
                 if (contentData != null) {
                     NuguTemplateItem(
+                        target = contentData.target,
+                        theme = contentData.theme,
                         content = contentData.content,
-                        onClick = {}
+                        onClick = { /* TODO 템플릿 api 조회해서 이동하기 추가 필요 */ }
                     )
                     Spacer(Modifier.padding(6.dp))
                 }
