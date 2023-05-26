@@ -24,6 +24,8 @@ fun NuguMessageTitle(
     modifier: Modifier = Modifier,
     textTarget: String,
     textTheme: String,
+    subTextTarget: String = "에게",
+    subTextTheme: String = " 편지를 올려봐요!"
 ) {
     val strongStyle = SpanStyle(
         color = Primary500,
@@ -46,13 +48,13 @@ fun NuguMessageTitle(
             Text(
                 buildAnnotatedString {
                     withStyle(strongStyle) { append(textTarget) }
-                    withStyle(normalStyle) { append("에게") }
+                    withStyle(normalStyle) { append(subTextTarget) }
                 }
             )
             Text(
                 buildAnnotatedString {
                     withStyle(strongStyle) { append(textTheme) }
-                    withStyle(normalStyle) { append(" 편지를 올려봐요!") }
+                    withStyle(normalStyle) { append(subTextTheme) }
                 }
             )
         }

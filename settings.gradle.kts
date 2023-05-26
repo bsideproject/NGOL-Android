@@ -38,4 +38,5 @@ include(
     ":feature:search",
     ":feature:onboard",
     ":feature:my_page",
+    ":feature:my-detail",
 )

@@ -22,12 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
 import com.nugu.nuguollim.design_system.component.NuguToolbar
@@ -54,6 +56,9 @@ fun SearchRoute(
     var themeId: Long? by rememberSaveable { mutableStateOf(null) }
     var searchNavigationState by remember { mutableStateOf<SearchNavigation>(SearchNavigation.Target) }
     val childHostController = rememberNavController()
+    val systemUiController = rememberSystemUiController()
+
+    systemUiController.setStatusBarColor(Color.White)
 
     Scaffold(
         topBar = {

@@ -59,6 +59,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.TemplateSort
 import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
@@ -88,6 +89,8 @@ fun HomeRoute(
     val focusRequester by remember { mutableStateOf(FocusRequester()) }
     var isFocused by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(Primary500)
 
     BackHandler(true) {
         if (viewModel.isFinish) {

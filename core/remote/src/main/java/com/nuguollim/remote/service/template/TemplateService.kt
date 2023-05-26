@@ -4,7 +4,10 @@ import com.nugu.config.AuthConfig
 import com.nuguollim.remote.model.template.AllMyWritingTemplateResponse
 import com.nuguollim.remote.model.template.AllTemplateResponse
 import com.nuguollim.remote.model.template.FavoriteResponse
+import com.nuguollim.remote.model.template.TemplateDataResponse
+import com.nuguollim.remote.model.template.TemplateResponse
 import com.nuguollim.remote.model.template.WritingResponse
+import retrofit2.Response
 import retrofit2.http.*
 
 interface TemplateService {
@@ -56,6 +59,18 @@ interface TemplateService {
         @Query("sort", encoded = true) sort: String? = null,
         @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
     ): AllTemplateResponse
+
+    @DELETE(value = "v1/templates/writing/{id}")
+    suspend fun removeTemplate(
+        @Path("id") id: Long,
+        @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
+    ): Response<Void>
+
+    @GET(value = "/api/v1/templates/{id}")
+    suspend fun getTemplate(
+        @Path("id") id: Long,
+        @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
+    ): TemplateDataResponse
 
 
 }
