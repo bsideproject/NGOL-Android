@@ -1,17 +1,16 @@
 package com.nugu.nuguollim
 
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.ui.Modifier
@@ -23,12 +22,11 @@ import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.Writing
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
 import com.nugu.nuguollim.navigation.MessageNavHost
+import com.nugu.nuguollim.util.MediaUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.*
-
 
 @AndroidEntryPoint
 class MessageActivity : ComponentActivity() {
@@ -125,67 +123,8 @@ class MessageActivity : ComponentActivity() {
     }
 
     private fun saveImage(bitmap: ImageBitmap, writing: Writing) {
-        saveImageLocal(bitmap)
+        MediaUtil.saveImageLocal(this, bitmap)
         saveImageRemote(writing)
-    }
-
-    private fun saveImageLocal(imageBitmap: ImageBitmap) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            saveImageLocalAboveQ(imageBitmap)
-        } else {
-            saveImageLocalUnderQ(imageBitmap)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun saveImageLocalAboveQ(imageBitmap: ImageBitmap) {
-        val bitmap = imageBitmap.asAndroidBitmap()
-        val resolver = contentResolver
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, getImageName())
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-        }
-
-        val uri: Uri? = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-        uri?.let {
-            val outputStream = resolver.openOutputStream(it)
-            outputStream?.let { os ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-                os.close()
-            }
-        }
-    }
-
-    private fun saveImageLocalUnderQ(imageBitmap: ImageBitmap) {
-        val bitmap = imageBitmap.asAndroidBitmap()
-        val path =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath
-        val dir = File("$path/saved_images")
-        dir.mkdirs()
-
-        val fileName = getImageName()
-        val file = File(dir, fileName)
-
-        try {
-            val outputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
-
-            // 이미지가 갤러리에 즉시 표시되도록 합니다.
-            MediaScannerConnection.scanFile(
-                this, arrayOf(file.toString()), null
-            ) { _, _ ->
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun getImageName(): String {
-        return "image_${System.currentTimeMillis()}.jpg"
     }
 
     private fun saveImageRemote(writing: Writing) {

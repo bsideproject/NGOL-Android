@@ -1,6 +1,5 @@
 package com.nugu.nuguollim.design_system.component
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,14 +14,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import com.nugu.nuguollim.design_system.theme.Black
-import com.nugu.nuguollim.design_system.theme.Gray300
 import com.nugu.nuguollim.design_system.theme.pretendard
 
 @Composable
 fun PretendardText(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = if (isSystemInDarkTheme()) Gray300 else Black,
+    color: Color = Black,
     fontSize: TextUnit = TextUnit.Unspecified,
     fontStyle: FontStyle? = null,
     fontWeight: FontWeight = FontWeight.Normal,

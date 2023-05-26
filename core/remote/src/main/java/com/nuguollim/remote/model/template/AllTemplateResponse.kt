@@ -10,6 +10,12 @@ data class AllTemplateResponse(
     val data: PagingResponse<TemplateResponse>
 )
 
+data class TemplateDataResponse(
+    val message: String,
+    val count: Long,
+    val data: TemplateResponse
+)
+
 fun AllTemplateResponse.asExternalModel() = AllTemplate(
     message = message,
     count = count,

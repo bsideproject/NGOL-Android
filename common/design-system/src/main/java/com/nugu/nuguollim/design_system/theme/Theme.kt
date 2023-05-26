@@ -33,22 +33,10 @@ private val LightColorPalette = lightColors(
 fun NuguollimTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val systemUiController = rememberSystemUiController()
 
-    val statusBarColor = if (darkTheme) {
-        Black
-    } else {
-        Color.White
-    }
-
-    systemUiController.setStatusBarColor(statusBarColor)
-
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+    systemUiController.setStatusBarColor(Color.White)
 
     MaterialTheme(
-        colors = colors,
+        colors = LightColorPalette,
         typography = Typography,
         shapes = Shapes,
         content = content

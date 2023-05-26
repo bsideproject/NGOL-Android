@@ -3,6 +3,7 @@ package com.nuguollim.data.repository.template
 import com.nugu.nuguollim.common.data.model.template.AllMyWritingTemplateData
 import com.nugu.nuguollim.common.data.model.template.AllTemplate
 import com.nugu.nuguollim.common.data.model.template.FavoriteData
+import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.common.data.model.template.Writing
 import com.nuguollim.remote.data_source.template.TemplateRemoteDataSource
 import com.nuguollim.remote.model.template.FavoriteResponse.Companion.asExternalModel
@@ -50,5 +51,11 @@ class TemplateRepositoryImpl @Inject constructor(
 
     override suspend fun getFavoriteTemplates(page: Int): AllTemplate =
         templateRemoteDataSource.getFavoriteTemplates(page).asExternalModel()
+
+    override suspend fun removeTemplate(id: Long) =
+        templateRemoteDataSource.removeTemplate(id)
+
+    override suspend fun getTemplate(id: Long): Template =
+        templateRemoteDataSource.getTemplate(id).data.asExternalModel()
 
 }

@@ -3,6 +3,7 @@ package com.nuguollim.remote.data_source.template
 import com.nuguollim.remote.model.template.AllMyWritingTemplateResponse
 import com.nuguollim.remote.model.template.AllTemplateResponse
 import com.nuguollim.remote.model.template.FavoriteResponse
+import com.nuguollim.remote.model.template.TemplateDataResponse
 import com.nuguollim.remote.model.template.WritingResponse
 
 interface TemplateRemoteDataSource {
@@ -29,5 +30,9 @@ interface TemplateRemoteDataSource {
     suspend fun getMyWritingTemplates(page: Int): AllMyWritingTemplateResponse
 
     suspend fun getFavoriteTemplates(page: Int): AllTemplateResponse
+
+    suspend fun removeTemplate(id: Long)
+
+    suspend fun getTemplate(id: Long): TemplateDataResponse
 
 }

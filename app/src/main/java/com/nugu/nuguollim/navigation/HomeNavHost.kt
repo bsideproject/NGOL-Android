@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,7 +25,9 @@ import com.nugu.system_info.DeviceInfo
 @Composable
 fun HomeNavHost(
     modifier: Modifier = Modifier,
-    onClickTemplate: (Template) -> Unit = {}
+    onClickTemplate: (Template) -> Unit = {},
+    onClickImageSave: (ImageBitmap) -> Unit,
+    onClickImageShare: (ImageBitmap) -> Unit,
 ) {
     val activity = LocalContext.current as Activity
     val navController = rememberNavController()
@@ -51,7 +54,9 @@ fun HomeNavHost(
                 onSendMail = { nickname, subject ->
                     activity.sendMail(nickname, subject)
                 },
-                onClickTemplate = onClickTemplate
+                onClickTemplate = onClickTemplate,
+                onClickImageSave = onClickImageSave,
+                onClickImageShare = onClickImageShare
             )
         }
     }
