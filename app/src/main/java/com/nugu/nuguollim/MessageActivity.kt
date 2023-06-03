@@ -84,6 +84,9 @@ class MessageActivity : ComponentActivity() {
             intent.getSerializableExtra("template") as Template
         }
 
+        // 조회수 증가
+        template?.id?.let { viewModel.addTemplateCount(it) }
+
         return template ?: Template()
     }
 

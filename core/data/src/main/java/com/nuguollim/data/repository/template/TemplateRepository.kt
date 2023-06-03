@@ -1,10 +1,6 @@
 package com.nuguollim.data.repository.template
 
-import com.nugu.nuguollim.common.data.model.template.AllMyWritingTemplateData
-import com.nugu.nuguollim.common.data.model.template.AllTemplate
-import com.nugu.nuguollim.common.data.model.template.FavoriteData
-import com.nugu.nuguollim.common.data.model.template.Template
-import com.nugu.nuguollim.common.data.model.template.Writing
+import com.nugu.nuguollim.common.data.model.template.*
 
 interface TemplateRepository {
 
@@ -17,6 +13,8 @@ interface TemplateRepository {
     ): AllTemplate
 
     suspend fun addFavorite(id: Long): FavoriteData
+
+    suspend fun addCount(id: Long): Boolean
 
     suspend fun removeFavorite(id: Long): FavoriteData
 

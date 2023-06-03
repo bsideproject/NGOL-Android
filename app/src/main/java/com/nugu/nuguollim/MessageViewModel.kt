@@ -23,4 +23,10 @@ class MessageViewModel @Inject constructor(
             templateRepository.saveTemplate(writing)
         }
     }
+
+    fun addTemplateCount(id: Long) {
+        viewModelScope.launch(exceptionHandler) {
+            templateRepository.addCount(id)
+        }
+    }
 }
