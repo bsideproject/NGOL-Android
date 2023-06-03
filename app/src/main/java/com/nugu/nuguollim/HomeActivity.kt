@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.ui.graphics.ImageBitmap
@@ -78,6 +79,12 @@ class HomeActivity : ComponentActivity() {
     }
 
     private fun saveImage(bitmap: ImageBitmap) {
-        MediaUtil.saveImageLocal(this, bitmap)
+        val saveLocal = MediaUtil.saveImageLocal(this, bitmap)
+
+        if (saveLocal) {
+            Toast.makeText(this, "이미지 저장 성공", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "이미지 저장 실패", Toast.LENGTH_SHORT).show()
+        }
     }
 }
