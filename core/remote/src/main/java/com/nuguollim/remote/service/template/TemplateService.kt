@@ -1,12 +1,7 @@
 package com.nuguollim.remote.service.template
 
 import com.nugu.config.AuthConfig
-import com.nuguollim.remote.model.template.AllMyWritingTemplateResponse
-import com.nuguollim.remote.model.template.AllTemplateResponse
-import com.nuguollim.remote.model.template.FavoriteResponse
-import com.nuguollim.remote.model.template.TemplateDataResponse
-import com.nuguollim.remote.model.template.TemplateResponse
-import com.nuguollim.remote.model.template.WritingResponse
+import com.nuguollim.remote.model.template.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -72,5 +67,9 @@ interface TemplateService {
         @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
     ): TemplateDataResponse
 
-
+    @GET(value = "v1/templates/{id}/count")
+    suspend fun addCount(
+        @Path("id") id: Long,
+        @Header("Authorization") accessToken: String = "Bearer ${AuthConfig.token}"
+    ): String
 }

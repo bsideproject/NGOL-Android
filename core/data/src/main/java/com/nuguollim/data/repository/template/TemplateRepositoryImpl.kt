@@ -1,10 +1,6 @@
 package com.nuguollim.data.repository.template
 
-import com.nugu.nuguollim.common.data.model.template.AllMyWritingTemplateData
-import com.nugu.nuguollim.common.data.model.template.AllTemplate
-import com.nugu.nuguollim.common.data.model.template.FavoriteData
-import com.nugu.nuguollim.common.data.model.template.Template
-import com.nugu.nuguollim.common.data.model.template.Writing
+import com.nugu.nuguollim.common.data.model.template.*
 import com.nuguollim.remote.data_source.template.TemplateRemoteDataSource
 import com.nuguollim.remote.model.template.FavoriteResponse.Companion.asExternalModel
 import com.nuguollim.remote.model.template.asExternalModel
@@ -34,6 +30,16 @@ class TemplateRepositoryImpl @Inject constructor(
 
     override suspend fun addFavorite(id: Long): FavoriteData =
         templateRemoteDataSource.addFavorite(id).asExternalModel()
+
+    override suspend fun addCount(id: Long): Boolean {
+        return try {
+            templateRemoteDataSource.addCount(id)
+
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 
     override suspend fun removeFavorite(id: Long): FavoriteData =
         templateRemoteDataSource.removeFavorite(id).asExternalModel()

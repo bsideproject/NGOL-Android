@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -83,6 +84,9 @@ class MessageActivity : ComponentActivity() {
             intent.getSerializableExtra("template") as Template
         }
 
+        // 조회수 증가
+        template?.id?.let { viewModel.addTemplateCount(it) }
+
         return template ?: Template()
     }
 
@@ -123,8 +127,14 @@ class MessageActivity : ComponentActivity() {
     }
 
     private fun saveImage(bitmap: ImageBitmap, writing: Writing) {
-        MediaUtil.saveImageLocal(this, bitmap)
+        val saveLocal = MediaUtil.saveImageLocal(this, bitmap)
         saveImageRemote(writing)
+
+        if (saveLocal) {
+            Toast.makeText(this, "이미지 저장 성공", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "이미지 저장 실패", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun saveImageRemote(writing: Writing) {

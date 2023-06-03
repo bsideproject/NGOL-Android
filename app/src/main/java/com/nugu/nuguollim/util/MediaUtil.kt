@@ -18,8 +18,8 @@ import java.io.IOException
 
 object MediaUtil {
 
-    fun saveImageLocal(context: Context, imageBitmap: ImageBitmap) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    fun saveImageLocal(context: Context, imageBitmap: ImageBitmap): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             saveImageLocalAboveQ(context.contentResolver, imageBitmap)
         } else {
             saveImageLocalUnderQ(context, imageBitmap)
@@ -27,7 +27,10 @@ object MediaUtil {
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun saveImageLocalAboveQ(contentResolver: ContentResolver, imageBitmap: ImageBitmap) {
+    private fun saveImageLocalAboveQ(
+        contentResolver: ContentResolver,
+        imageBitmap: ImageBitmap
+    ): Boolean {
         val bitmap = imageBitmap.asAndroidBitmap()
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, getImageName())
@@ -38,16 +41,19 @@ object MediaUtil {
         val uri: Uri? =
             contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
+        var isSuccess = false
         uri?.let {
             val outputStream = contentResolver.openOutputStream(it)
             outputStream?.let { os ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
+                isSuccess = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
                 os.close()
             }
         }
+
+        return isSuccess
     }
 
-    private fun saveImageLocalUnderQ(context: Context, imageBitmap: ImageBitmap) {
+    private fun saveImageLocalUnderQ(context: Context, imageBitmap: ImageBitmap): Boolean {
         val bitmap = imageBitmap.asAndroidBitmap()
         val path =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath
@@ -57,9 +63,11 @@ object MediaUtil {
         val fileName = getImageName()
         val file = File(dir, fileName)
 
+
+        var isSuccess = false
         try {
             val outputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            isSuccess = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             outputStream.flush()
             outputStream.close()
 
@@ -70,6 +78,8 @@ object MediaUtil {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+
+        return isSuccess
     }
 
     private fun getImageName(): String {
