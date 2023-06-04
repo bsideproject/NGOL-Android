@@ -25,6 +25,7 @@ fun MessageEditScreen(
     target: String,
     theme: String,
     papers: List<Paper>,
+    id: Long? = null,
     onClickTextCopy: (String) -> Unit = {},
     onClickTextShare: (String) -> Unit = {},
     onClose: () -> Unit = {},
@@ -91,6 +92,7 @@ fun MessageEditScreen(
                     if (isClickSaveImage) {
                         val content = textValue.textFieldValue.text
                         val writing = Writing(
+                            id = id,
                             content = content,
                             paper = imgBackground ?: "",
                             templateId = 0

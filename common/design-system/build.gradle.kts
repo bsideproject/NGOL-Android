@@ -24,4 +24,5 @@ dependencies {
     implementation(libs.capturable)
 
     implementation(projects.common.data)
+    implementation(projects.common.uiCore)
 }

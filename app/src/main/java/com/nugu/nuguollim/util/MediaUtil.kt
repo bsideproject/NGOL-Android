@@ -3,20 +3,79 @@ package com.nugu.nuguollim.util
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
 object MediaUtil {
+
+    fun Context.shareText(text: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, text)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(intent, null)
+        startActivity(shareIntent)
+    }
+
+    fun Context.saveImage(bitmap: ImageBitmap) {
+        val saveLocal = saveImageLocal(this, bitmap)
+
+        if (saveLocal) {
+            Toast.makeText(this, "이미지 저장 성공", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "이미지 저장 실패", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * share image bitmap
+     */
+    fun Context.shareImage(imageBitmap: ImageBitmap) {
+        val bitmap = imageBitmap.asAndroidBitmap()
+        try {
+            // 이미지 저장
+            val cachePath = File(applicationContext.cacheDir, "images")
+            cachePath.mkdirs()
+
+            val stream = FileOutputStream("$cachePath/shareImage.png")
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            stream.close()
+
+            // 이미지 공유
+            val newFile = File(cachePath, "shareImage.png")
+            val contentUri: Uri = FileProvider.getUriForFile(
+                applicationContext,
+                "com.nugu.nuguollim.provider",
+                newFile
+            )
+
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                // 임시 권한을 부여
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                setDataAndType(contentUri, contentResolver.getType(contentUri))
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+            }
+            startActivity(Intent.createChooser(shareIntent, null))
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
 
     fun saveImageLocal(context: Context, imageBitmap: ImageBitmap): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

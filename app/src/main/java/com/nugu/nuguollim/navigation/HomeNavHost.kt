@@ -4,20 +4,19 @@ import android.app.Activity
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nugu.nuguollim.LoginInActivity
 import com.nugu.nuguollim.app.R
+import com.nugu.nuguollim.common.data.model.template.MyWritingTemplateData
 import com.nugu.nuguollim.common.data.model.template.Template
 import com.nugu.nuguollim.design_system.component.NuguBottomNavItem
 import com.nugu.nuguollim.ui.home.HomeRoute
 import com.nugu.nuguollim.ui.my_page.MyPageRoute
 import com.nugu.nuguollim.ui.search.SearchRoute
 import com.nugu.system_info.DeviceInfo
-
 
 /**
  * 메인 화면에 대한 NavHost
@@ -26,8 +25,8 @@ import com.nugu.system_info.DeviceInfo
 fun HomeNavHost(
     modifier: Modifier = Modifier,
     onClickTemplate: (Template) -> Unit = {},
-    onClickImageSave: (ImageBitmap) -> Unit,
-    onClickImageShare: (ImageBitmap) -> Unit,
+    onClickMyWritingTemplate: (MyWritingTemplateData) -> Unit = {},
+    onMoveDetailScreen: (MyWritingTemplateData) -> Unit = {},
 ) {
     val activity = LocalContext.current as Activity
     val navController = rememberNavController()
@@ -55,8 +54,8 @@ fun HomeNavHost(
                     activity.sendMail(nickname, subject)
                 },
                 onClickTemplate = onClickTemplate,
-                onClickImageSave = onClickImageSave,
-                onClickImageShare = onClickImageShare
+                onClickMyWritingTemplate = onClickMyWritingTemplate,
+                onMoveDetailScreen = onMoveDetailScreen,
             )
         }
     }

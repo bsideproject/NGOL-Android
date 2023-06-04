@@ -24,8 +24,10 @@ internal class BodyCallAdapter<T>(
                 call.clone().enqueue(
                     object : Callback<T> {
                         override fun onResponse(call: Call<T>, response: Response<T>) {
-                            cancellableContinuation.resume(response.body()!!) {
-                                cancellableContinuation.resumeWithException(it)
+                            response.body()?.let { body ->
+                                cancellableContinuation.takeIf { it.isActive }?.resume(body) {
+                                    cancellableContinuation.resumeWithException(it)
+                                }
                             }
                         }
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,15 +16,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.nugu.my_detail.MyMessageDetailDialog
+import com.nugu.my_detail.DeleteTemplateConfirmDialog
 import com.nugu.my_page.component.MyPageNickName
 import com.nugu.my_page.component.MyPageSettingDialog
 import com.nugu.my_page.component.MyProfileSetting
@@ -33,7 +36,6 @@ import com.nugu.nuguollim.design_system.component.NuguBottomNavigation
 import com.nugu.nuguollim.design_system.component.NuguSwitch
 import com.nugu.nuguollim.design_system.component.TermDialog
 import com.nugu.nuguollim.design_system.theme.NuguollimTheme
-import com.nugu.my_detail.DeleteTemplateConfirmDialog
 import com.nugu.nuguollim.ui.my_page.component.MyFavoriteTemplates
 import com.nugu.nuguollim.ui.my_page.component.MyNickNameChangeDialog
 import com.nugu.nuguollim.ui.my_page.component.MyWritingTemplates
@@ -45,8 +47,8 @@ fun MyPageRoute(
     onSendMail: (String, String) -> Unit = { _, _ -> },
     onMoveLoginPage: () -> Unit = {},
     onClickTemplate: (Template) -> Unit = {},
-    onClickImageSave: (ImageBitmap) -> Unit,
-    onClickImageShare: (ImageBitmap) -> Unit,
+    onClickMyWritingTemplate: (MyWritingTemplateData) -> Unit = {},
+    onMoveDetailScreen: (MyWritingTemplateData) -> Unit = {},
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Color.White)
@@ -61,8 +63,8 @@ fun MyPageRoute(
             onSendMail = onSendMail,
             onMoveLoginPage = onMoveLoginPage,
             onClickTemplate = onClickTemplate,
-            onClickImageSave = onClickImageSave,
-            onClickImageShare = onClickImageShare
+            onClickMyWritingTemplate = onClickMyWritingTemplate,
+            onMoveDetailScreen = onMoveDetailScreen,
         )
     }
 }
@@ -74,8 +76,8 @@ fun MyPageScreen(
     onSendMail: (String, String) -> Unit = { _, _ -> },
     onMoveLoginPage: () -> Unit = {},
     onClickTemplate: (Template) -> Unit = {},
-    onClickImageSave: (ImageBitmap) -> Unit,
-    onClickImageShare: (ImageBitmap) -> Unit,
+    onClickMyWritingTemplate: (MyWritingTemplateData) -> Unit = {},
+    onMoveDetailScreen: (MyWritingTemplateData) -> Unit = {},
 ) {
     val myUserData by viewModel.myUserData.collectAsStateWithLifecycle()
     val termsData by viewModel.termsState.collectAsStateWithLifecycle()
@@ -94,6 +96,18 @@ fun MyPageScreen(
                 false
             )
         )
+    }
+
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+    DisposableEffect(lifecycle) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                myWritingTemplates.refresh()
+            }
+        }
+        lifecycle.addObserver(lifecycleObserver)
+        onDispose { lifecycle.removeObserver(lifecycleObserver) }
     }
 
     if (showNickNameChangeDialog) {
@@ -127,30 +141,24 @@ fun MyPageScreen(
     }
 
     if (showMyMessageDetailDialog.second) {
-        MyMessageDetailDialog(
-            myWritingTemplateData = showMyMessageDetailDialog.first!!,
-            onMovePageMessageEdit = { id ->
-                viewModel.getTemplate(
-                    id = id,
-                    success = {
-                        onClickTemplate.invoke(it)
-                        showMyMessageDetailDialog = Pair(null, false)
-                    },
-                    fail = { it.printStackTrace() }
-                )
-            },
-            onDeleteTemplate = { id ->
-                viewModel.removeTemplate(
-                    id = id,
-                    success = myWritingTemplates::refresh,
-                    fail = { it.printStackTrace() }
-                )
-                showMyMessageDetailDialog = Pair(null, false)
-            },
-            onDismissRequest = { showMyMessageDetailDialog = Pair(null, false) },
-            onClickImageSave = onClickImageSave,
-            onClickImageShare = onClickImageShare
-        )
+//        MyMessageDetailDialog(
+//            myWritingTemplateData = showMyMessageDetailDialog.first!!,
+//            onMovePageMessageEdit = { myWritingTemplate ->
+//                showMyMessageDetailDialog = Pair(null, false)
+//                onClickMyWritingTemplate.invoke(myWritingTemplate)
+//            },
+//            onDeleteTemplate = { id ->
+//                viewModel.removeTemplate(
+//                    id = id,
+//                    success = myWritingTemplates::refresh,
+//                    fail = { it.printStackTrace() }
+//                )
+//                showMyMessageDetailDialog = Pair(null, false)
+//            },
+//            onDismissRequest = { showMyMessageDetailDialog = Pair(null, false) },
+//            onClickImageSave = onClickImageSave,
+//            onClickImageShare = onClickImageShare
+//        )
     }
 
     if (termsData is ResultState.Success && showTermsDialog) {
@@ -197,7 +205,8 @@ fun MyPageScreen(
                 MyWritingTemplates(
                     myWritingTemplates = myWritingTemplates,
                     onRemoveItem = { showDeleteTemplateConfirmDialog = Pair(it, true) },
-                    onMoveDetailScreen = { showMyMessageDetailDialog = Pair(it, true) },
+                    onMoveDetailScreen = onMoveDetailScreen,
+                    onMoveEditScreen = { onClickMyWritingTemplate.invoke(it) }
                 )
             } else {
                 MyFavoriteTemplates(

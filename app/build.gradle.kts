@@ -78,6 +78,7 @@ dependencies {
     implementation(projects.feature.socialLogin)
     implementation(projects.feature.search)
     implementation(projects.feature.onboard)
+    implementation(projects.feature.myDetail)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.lifecycle.runtime)
