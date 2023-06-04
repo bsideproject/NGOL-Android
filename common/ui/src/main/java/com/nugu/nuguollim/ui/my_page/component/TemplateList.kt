@@ -69,6 +69,7 @@ internal fun ColumnScope.MyFavoriteTemplates(
 internal fun ColumnScope.MyWritingTemplates(
     myWritingTemplates: LazyPagingItems<MyWritingTemplateData>,
     onRemoveItem: (Long) -> Unit = {},
+    onMoveEditScreen: (MyWritingTemplateData) -> Unit = {},
     onMoveDetailScreen: (MyWritingTemplateData) -> Unit = {},
 ) {
     if (myWritingTemplates.itemCount > 0) {
@@ -80,7 +81,7 @@ internal fun ColumnScope.MyWritingTemplates(
                         confirmStateChange = { dismissValue ->
                             when (dismissValue) {
                                 DismissValue.Default -> Unit
-                                DismissValue.DismissedToEnd -> onMoveDetailScreen.invoke(currentItem)
+                                DismissValue.DismissedToEnd -> onMoveEditScreen.invoke(currentItem)
                                 DismissValue.DismissedToStart -> onRemoveItem.invoke(currentItem.id)
                             }
                             false

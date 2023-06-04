@@ -9,6 +9,8 @@ data class MyWritingTemplateResponse(
     val content: String,
     val paper: String,
     val templateId: Long,
+    val createdAt: String,
+    val updatedAt: String
 ) {
     companion object {
         fun MyWritingTemplateResponse.asExternalModel(): MyWritingTemplateData =
@@ -19,6 +21,8 @@ data class MyWritingTemplateResponse(
                 content = content,
                 paper = paper,
                 templateId = templateId,
+                createdAt = createdAt,
+                updatedAt = updatedAt,
             )
     }
 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nugu.nuguollim.design_system.theme.Gray200
 import com.nugu.nuguollim.design_system.theme.Gray600
+import com.nugu.ui_core.singleClick
 
 @Composable
 fun NuguMessageToolbar(
@@ -25,17 +26,19 @@ fun NuguMessageToolbar(
     onClickShareImage: () -> Unit = {},
     onClickSave: () -> Unit = {}
 ) {
-    if (textEditMode) {
-        NuguMessageTextToolbar(
-            onClickBack = onClickBack,
-            onClickClose = onClickClose
-        )
-    } else {
-        NuguMessageEditToolbar(
-            onClickBack = onClickBack,
-            onClickShareImage = onClickShareImage,
-            onClickSave = onClickSave
-        )
+    singleClick { singleClickListener ->
+        if (textEditMode) {
+            NuguMessageTextToolbar(
+                onClickBack = { singleClickListener.onClick(onClickBack) },
+                onClickClose = { singleClickListener.onClick(onClickClose) }
+            )
+        } else {
+            NuguMessageEditToolbar(
+                onClickBack = { singleClickListener.onClick(onClickBack) },
+                onClickShareImage = { singleClickListener.onClick(onClickShareImage) },
+                onClickSave = { singleClickListener.onClick(onClickSave) }
+            )
+        }
     }
 }
 

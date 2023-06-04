@@ -54,6 +54,12 @@
             android:theme="@style/Theme.Nuguollim">
         </activity>
         <activity
+            android:name="com.nugu.nuguollim.MyMessageActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Nuguollim">
+        </activity>
+        <activity
             android:name="com.nugu.nuguollim.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
