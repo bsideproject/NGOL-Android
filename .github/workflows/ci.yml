@@ -23,7 +23,7 @@ jobs:
     - run: echo $DEBUG_KEY | base64 -d > debug.keystore
     - name: setting google-service.json
       env:
-        ZDATA: ${{ secrets.$GOOGLE_SERVICE }}
+        DATA: ${{ secrets.$GOOGLE_SERVICE }}
     - run: echo $DATA /home/runner/work/NGOL-Android/NGOL-Android/app/google-services.json
     - run: echo "NAVER_BASE_URL=\"NAVER_BASE_URL\"" >> local.properties
     - run: echo "NAVER_CLIENT_ID=\"NAVER_CLIENT_ID\"" >> local.properties
