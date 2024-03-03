@@ -21,11 +21,11 @@ jobs:
         cache: gradle
 
     - run: echo $DEBUG_KEY | base64 -d > debug.keystore
-    - run: cat /home/runner/work/NGOL-Android/NGOL-Android/app/google-services.json
-    - name: setting google-service.json
-      env:
-        DATA: ${{ secrets.GOOGLE_SERVICE }}
-      run: echo $DATA /home/runner/work/NGOL-Android/NGOL-Android/app/google-services.json
+#    - name: setting google-service.json
+#      env:
+#        DATA: ${{ secrets.GOOGLE_SERVICE }}
+#      run: echo $DATA /home/runner/work/NGOL-Android/NGOL-Android/app/google-services.json
+    - run: echo $GOOGLE_SERVICE > /home/runner/work/NGOL-Android/NGOL-Android/app/google-services.json
     - run: echo "NAVER_BASE_URL=\"NAVER_BASE_URL\"" >> local.properties
     - run: echo "NAVER_CLIENT_ID=\"NAVER_CLIENT_ID\"" >> local.properties
     - run: echo "NAVER_CLIENT_SECRET=\"NAVER_CLIENT_SECRET\"" >> local.properties
