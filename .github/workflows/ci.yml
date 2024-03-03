@@ -29,7 +29,6 @@ jobs:
       run: |
         echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
         cat app/google-services.json
-    - run: echo $GOOGLE_SERVICE > /home/runner/work/NGOL-Android/NGOL-Android/app/google-services.json
     - run: echo "NAVER_BASE_URL=\"NAVER_BASE_URL\"" >> local.properties
     - run: echo "NAVER_CLIENT_ID=\"NAVER_CLIENT_ID\"" >> local.properties
     - run: echo "NAVER_CLIENT_SECRET=\"NAVER_CLIENT_SECRET\"" >> local.properties
@@ -38,4 +37,4 @@ jobs:
     - run: echo "KAKAO_SCHME=\"KAKAO_SCHME\"" >> local.properties
     - run: echo "BASE_URL=\"BASE_URL\"" >> local.properties
     - name: Build with Gradle
-      run: ./gradlew assembleDebug
+      run: ./gradlew assembleDebug --debug
