@@ -20,11 +20,15 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
     - run: echo $DEBUG_KEY | base64 -d > debug.keystore
     - name: setting google-service.json
       env:
         GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICE }}
-      run: echo "GOOGLE_SERVICE" > app/google-services.json
+      run: |
+        echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
+        cat app/google-services.json
     - run: echo $GOOGLE_SERVICE > /home/runner/work/NGOL-Android/NGOL-Android/app/google-services.json
     - run: echo "NAVER_BASE_URL=\"NAVER_BASE_URL\"" >> local.properties
     - run: echo "NAVER_CLIENT_ID=\"NAVER_CLIENT_ID\"" >> local.properties
@@ -33,7 +37,5 @@ jobs:
     - run: echo "KAKAO_NATIVE_APP_KEY=\"KAKAO_NATIVE_APP_KEY\"" >> local.properties
     - run: echo "KAKAO_SCHME=\"KAKAO_SCHME\"" >> local.properties
     - run: echo "BASE_URL=\"BASE_URL\"" >> local.properties
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew assembleDebug
